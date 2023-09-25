@@ -11,8 +11,8 @@ class NodoB
 {
     public:
 
-        NodoB(){izq = der = NULL;}
-        NodoB(T m_info ){info = m_info;izq = NULL;  der = NULL;}
+        NodoB(){izq = der = nullptr;}
+        NodoB(T m_info ){info = m_info;izq = nullptr;  der = nullptr;}
         NodoB(T m_info, NodoB<T> m_izq  , NodoB<T> m_der  ){info = m_info;izq = m_izq;  der = m_der;}
         T Getinfo() { return info; }
         NodoB<T> * GetIzq() { return izq; }
