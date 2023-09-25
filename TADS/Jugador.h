@@ -8,9 +8,9 @@ class Jugador {
 private:
     list<Carta> cartas;
     list<Tropa> tropas;
-    list<Territorio> territorios;
     string id;
     string nombre;
+    string color;
 public:
     [[nodiscard]] const list<Carta> &getCartas() const;
 
@@ -20,10 +20,6 @@ public:
 
     void setTropas(const list<Tropa> &tropas);
 
-    [[nodiscard]] const list<Territorio> &getTerritorios() const;
-
-    void setTerritorios(const list<Territorio> &territorios);
-
     [[nodiscard]] const string &getId() const;
 
     void setId(const string &id);
@@ -31,6 +27,10 @@ public:
     [[nodiscard]] const string &getNombre() const;
 
     void setNombre(const string &nombre);
+
+    const string &getColor() const;
+
+    void setColor(const string &color);
 };
 
 

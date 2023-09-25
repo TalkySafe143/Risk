@@ -11,8 +11,7 @@ template <class T>
 class ArbBin
 {
     public:
-
-        ArbBin(); //constructor por omisiÃ³n
+        ArbBin(); //constructor por omisión
         ArbBin(const T &); //constructor con info
         ArbBin(const T &, const ArbBin<T> & , const ArbBin<T> &); //constructor con info y los dos subarboles
         ~ArbBin(); //destructor

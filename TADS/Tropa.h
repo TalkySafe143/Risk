@@ -7,13 +7,17 @@ using namespace std;
 
 class Tropa {
 public:
-    const string &getTipo() const;
+    [[nodiscard]] const string &getTipo() const;
 
     void setTipo(const string &tipo);
 
+    [[nodiscard]] const string &getIdTerritorio() const;
+
+    void setIdTerritorio(const string &idTerritorio);
+
 private:
     string tipo;
-public:
+    string idTerritorio;
 
 };
 

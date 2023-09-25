@@ -1,22 +1,17 @@
 #include "Territorio.h"
 
-int Territorio::getId() const {
-    return id;
+const string &Territorio::getIdTerritorio() const {
+    return idTerritorio;
 }
 
-void Territorio::setId(int id) {
-    Territorio::id = id;
+void Territorio::setIdTerritorio(const string &idTerritorio) {
+    Territorio::idTerritorio = idTerritorio;
 }
 
-int Territorio::getTropas() const {
-    return tropas;
+const string &Territorio::getNombre() const {
+    return nombre;
 }
 
-void Territorio::setTropas(int tropas) {
-    Territorio::tropas = tropas;
-}
-
-void Territorio::modificarTropas(int action) {
-    if (action < 0) Territorio::tropas--;
-    else Territorio::tropas++;
+void Territorio::setNombre(const string &nombre) {
+    Territorio::nombre = nombre;
 }

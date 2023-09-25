@@ -7,3 +7,11 @@ const string &Tropa::getTipo() const {
 void Tropa::setTipo(const string &tipo) {
     Tropa::tipo = tipo;
 }
+
+const string &Tropa::getIdTerritorio() const {
+    return idTerritorio;
+}
+
+void Tropa::setIdTerritorio(const string &idTerritorio) {
+    Tropa::idTerritorio = idTerritorio;
+}

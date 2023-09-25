@@ -20,14 +20,6 @@ void Jugador::setTropas(const list<Tropa> &tropas) {
     Jugador::tropas = tropas;
 }
 
-const list<Territorio> &Jugador::getTerritorios() const {
-    return territorios;
-}
-
-void Jugador::setTerritorios(const list<Territorio> &territorios) {
-    Jugador::territorios = territorios;
-}
-
 const string &Jugador::getId() const {
     return id;
 }
@@ -42,4 +34,12 @@ const string &Jugador::getNombre() const {
 
 void Jugador::setNombre(const string &nombre) {
     Jugador::nombre = nombre;
+}
+
+const string &Jugador::getColor() const {
+    return color;
+}
+
+void Jugador::setColor(const string &color) {
+    Jugador::color = color;
 }

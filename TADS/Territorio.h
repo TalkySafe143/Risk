@@ -6,19 +6,20 @@
 using namespace std;
 
 class Territorio {
-private:
-    int id;
-    int tropas;
 public:
-    int getId() const;
+    [[nodiscard]] const string &getIdTerritorio() const;
 
-    void setId(int id);
+    void setIdTerritorio(const string &idTerritorio);
 
-    int getTropas() const;
+    [[nodiscard]] const string &getNombre() const;
 
-    void setTropas(int tropas);
+    void setNombre(const string &nombre);
 
-    void modificarTropas(int action);
+private:
+    string idTerritorio;
+    string nombre;
+public:
+
 
 };
 

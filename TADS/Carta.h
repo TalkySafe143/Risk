@@ -5,23 +5,25 @@
 using namespace std;
 
 class Carta {
-public:
-    int getIdTerritorio() const;
-
-    void setIdTerritorio(int idTerritorio);
-
-    [[nodiscard]] const string &getTipoTropa() const;
-
-    void setTipoTropa(const string &tipoTropa);
-
-    bool isComodin() const;
-
-    void setComodin(bool comodin);
 
 private:
-    int idTerritorio;
-    string tipoTropa;
-    bool comodin;
+    string id;
+    string tipoUnidad;
+    string idTerritorio; 
+
+public:
+    [[nodiscard]] const string &getId() const;
+
+    void setId(const string &id);
+
+    [[nodiscard]] const string &getTipoUnidad() const;
+
+    void setTipoUnidad(const string &tipoUnidad);
+
+    [[nodiscard]] const string &getIdTerritorio() const;
+
+    void setIdTerritorio(const string &idTerritorio);
+
 };
 
 

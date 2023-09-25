@@ -10,7 +10,6 @@ template <class T>
 class NodoB
 {
     public:
-
         NodoB(){izq = der = nullptr;}
         NodoB(T m_info ){info = m_info;izq = nullptr;  der = nullptr;}
         NodoB(T m_info, NodoB<T> m_izq  , NodoB<T> m_der  ){info = m_info;izq = m_izq;  der = m_der;}
@@ -46,3 +45,23 @@ class NodoB
 
 
 #endif //PROYECTO_NODOB_H
+
+//#ifndef NODO_H_INCLUDED
+//#define NODO_H_INCLUDED
+//
+//template <class T>
+//class Nodo
+//{
+//	private:
+//        T info;
+//        Nodo<T> *sig;
+//    public:
+//            Nodo();
+//            Nodo(T , Nodo<T> *sig = nullptr);
+//        void setInfo(T );
+//        void setSig(Nodo<T> *);
+//        T   getInfo() const;
+//        Nodo<T> *getSig() const;
+//};
+//
+//#endif // NODO_H_INCLUDED
