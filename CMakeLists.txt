@@ -11,4 +11,8 @@ add_executable(Proyecto main.cpp
         TADS/Carta.cpp
         TADS/Carta.h
         TADS/Jugador.cpp
-        TADS/Jugador.h)
+        TADS/Jugador.h
+        TADS/ArbBin.cpp
+        TADS/ArbBin.h
+        TADS/nodoB.cpp
+        TADS/nodoB.h)
