@@ -16,6 +16,8 @@ StringOptions evalString(string a) {
 
 int main() {
 
+    system("ascii-image-converter title.png -f -b --dither -C");
+    cout << "Ingrese su comando: ";
     list<string> command;
     list<string>::iterator it;
     do { // Segmentation fault
@@ -37,6 +39,10 @@ int main() {
         switch (evalString(*it)) {
             case inicializar:
                 cout << "Inicializar\n";
+                system("ascii-image-converter continentes.png -f -b --dither -C");
+                cout << "Ingrese su continente: ";
+                int a;
+                cin >> a;
                 break;
             case turno:
                 cout << "turno\n";

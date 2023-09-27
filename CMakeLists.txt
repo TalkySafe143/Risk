@@ -15,4 +15,5 @@ add_executable(Proyecto main.cpp
         TADS/ArbBin.cpp
         TADS/ArbBin.h
         TADS/nodoB.cpp
-        TADS/nodoB.h)
+        TADS/nodoB.h
+)
