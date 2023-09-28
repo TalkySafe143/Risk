@@ -51,6 +51,6 @@ int main() {
                 break;
         }
     } while (*it != "salir");
-
+    // Este es un cambio para la rama tarjetas
     return 0;
 }
