@@ -23,9 +23,10 @@ int main() {
     list<string>::iterator it;
     do { // Segmentation fault
         command.clear();
-        char* str;
+        char* str = new char[100];
         cin.getline(str, 50);
 
+        cout << "Antes del switch\n";
         char *p = strtok(str, " ");
         if (p != nullptr) {
             while (p != nullptr){
@@ -36,10 +37,10 @@ int main() {
             command.emplace_back(str);
         }
         it = command.begin();
-
         switch (evalString(*it)) {
             case inicializar: {
                 cout << "Inicializar\n";
+                system("ascii-image-converter continentes.png -f -b --dither -C");
                 int CantJugadores;
                 cout << "Ingresa la cantidad de jugadores con el que quieres iniciar el juego" << endl;
                 cout << "Recuerda que minimo puedes jugar con 2 y maximo 6" << endl;
