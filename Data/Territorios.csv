@@ -1,0 +1,43 @@
+Key_territorio;id_contiente;id_territorio;Descripcion
+1;1;1;Alaska
+2;1;2;Alberta
+3;1;9;Estados Unidos Occidentales
+4;1;4;Estados Unidos Orientales
+5;1;5;Groenlandia
+6;1;7;Ontario
+7;1;8;Quebec
+8;1;6;Territorio Noroccidental
+9;1;3;America Central
+10;2;1;Argentina
+11;2;2;Brasil
+12;2;3;Peru
+13;2;4;Venezuela
+14;3;4;Escandinavia
+15;3;3;Europa del Norte
+16;3;5;Europa del Sur
+17;3;7;Europa Occidental
+18;3;1;Gran Bretania
+19;3;2;Islandia
+20;3;6;Ucrania
+21;4;5;Africa del Norte
+22;4;6;Africa del Sur
+23;4;2;Africa Oriental
+24;4;1;Congo
+25;4;3;Egipto
+26;4;4;Madagascar
+27;5;1;Afghanistan
+28;5;2;China
+29;5;3;India
+30;5;4;Irkutush
+31;5;5;Japon
+32;5;6;Kamtchatca
+33;5;7;Medio Oriente
+34;5;8;Mongolia
+35;5;9;Siam
+36;5;10;Siberia
+37;5;11;Ural
+38;5;12;Yakustsk
+39;6;4;Australia Occidental
+40;6;1;Australia Oriental
+41;6;2;Indonesia
+42;6;3;Nueva Guinea
