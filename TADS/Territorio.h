@@ -15,12 +15,19 @@ public:
 
     void setNombre(const string &nombre);
 
+    [[nodiscard]] const string &getIdContinente() const;
+
+    void setIdContinente(const string &idContinente);
+
+    [[nodiscard]] int getTropas() const;
+
+    void setTropas(int tropas);
+
 private:
     string idTerritorio;
     string nombre;
-public:
-
-
+    string idContinente;
+    int tropas;
 };
 
 

@@ -8,21 +8,26 @@ class Carta {
 
 private:
     string id;
-    string tipoUnidad;
-    string idTerritorio; 
+    int value;
+    string idTerritorio;
+    bool comodin;
 
 public:
     [[nodiscard]] const string &getId() const;
 
     void setId(const string &id);
 
-    [[nodiscard]] const string &getTipoUnidad() const;
-
-    void setTipoUnidad(const string &tipoUnidad);
-
     [[nodiscard]] const string &getIdTerritorio() const;
 
     void setIdTerritorio(const string &idTerritorio);
+
+    [[nodiscard]] bool isComodin() const;
+
+    void setComodin(bool comodin);
+
+    [[nodiscard]] int getValue() const;
+
+    void setValue(int value);
 
 };
 

@@ -12,12 +12,12 @@ void Jugador::setCartas(const list<Carta> &cartas) {
     Jugador::cartas = cartas;
 }
 
-const list<Tropa> &Jugador::getTropas() const {
-    return tropas;
+const list<Territorio> &Jugador::getTerritorios() const {
+    return territorios;
 }
 
-void Jugador::setTropas(const list<Tropa> &tropas) {
-    Jugador::tropas = tropas;
+void Jugador::setTerritorios(const list<Territorio> &territorios) {
+    Jugador::territorios = territorios;
 }
 
 const string &Jugador::getId() const {
