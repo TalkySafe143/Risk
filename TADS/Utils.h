@@ -18,6 +18,14 @@ public:
      * @return Un booleano indicando si son iguales o no
      */
     static bool compareFieldLists(list<Territorio> a, list<Territorio> b);
+
+    /**
+     * Esta funcion tiene como proposito extraer la frecuencia de los caracteres del archivo de
+     * texto indicado
+     * @param file Nombre del archivo de texto a analizar
+     * @return Mapa con la frecuencia de los caracteres (Mapa['a'] es -1 si hay algún error)
+     */
+    static map<char, int> getFreq(string file);
 };
 
 

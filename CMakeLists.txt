@@ -22,4 +22,6 @@ add_executable(Proyecto main.cpp
         TADS/Utils.h
         TADS/Interfaces.cpp
         TADS/Interfaces.h
+        TADS/Huffman.cpp
+        TADS/Huffman.h
 )
