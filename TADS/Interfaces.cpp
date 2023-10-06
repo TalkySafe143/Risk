@@ -127,11 +127,30 @@ void Interfaces::asignarTropasTerritorio(int tropas, Jugador &jugador) {
             system("cls");
             continue;
         }
-
         for (auto continente: continentes) {
             for (auto territorio: continente.getTerritorios()) {
                 if (idTerritorio == territorio.getIdTerritorio()) {
                     territorio.setTropas(tropas);
+                    for (auto &carta: Interfaces::game.getCartas()) {
+                        if (carta.getIdTerritorio() == idTerritorio) {
+                            jugador.agregarCarta(carta);
+                            break;
+                        }
+                    }
+
+                    list<Carta> cartas = Interfaces::game.getCartas();
+
+                    auto it = cartas.begin();
+
+                    for (; it != cartas.end(); it++) {
+                        if (it->getIdTerritorio() == idTerritorio) {
+                            cartas.remove(*it);
+                            break;
+                        }
+                    }
+
+                    Interfaces::game.setCartas(cartas);
+
                     valid = true;
                     break;
                 }

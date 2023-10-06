@@ -16,6 +16,8 @@ public:
 
     void setCartas(const list<Carta> &cartas);
 
+    void agregarCarta(const Carta carta);
+
     [[nodiscard]] const list<Territorio> &getTerritorios() const;
 
     void setTerritorios(const list<Territorio> &territorios);
