@@ -28,7 +28,7 @@ public:
      * @param tropas El numero de tropas a ubicar
      * @param jugador Jugador el cual quiere ubicar las tropas
      */
-    void asignarTropasTerritorio(int tropas, Jugador jugador);
+    void asignarTropasTerritorio(int tropas, Jugador &jugador);
 
     [[nodiscard]] const Risk &getGame() const;
 

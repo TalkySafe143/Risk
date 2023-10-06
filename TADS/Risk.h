@@ -31,6 +31,20 @@ public:
     int inicializarDatos();
 
     /**
+     * Esta funcion tiene como objetivo inicializar los jugadores desde un archivo
+     * de configuracion
+     * @param file El nombre del archivo de configuracion
+     * @return Una lista de jugadores inicializados
+    */
+    list<Jugador> inicializarJugadores(string file);
+
+    /**
+     * Esta funcion tiene como proposito simular las jugadas desde un archivo
+     * @param file El nombre del archivo de las jugadas
+    */
+    void simularJugadas(string file);
+
+    /**
      * Esta funcion tiene como proposito iniciar formalmente el juego con los jugadores
      * @param jugadores La lista de los jugadores del juego
      */
@@ -39,7 +53,7 @@ public:
     /**
      * Esta funcion tiene como proposito verificar cuantas tropas puede reclamar el turno actual
      * relacionado con el numero de territorios y continentes ocupados
-     * @return La cantidad de cartas que el turno actual puede reclamar
+     * @return La cantidad de tropas que el turno actual puede reclamar
      */
     int reasignarTropas();
 
