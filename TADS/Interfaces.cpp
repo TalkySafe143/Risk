@@ -110,8 +110,10 @@ void Interfaces::asignarTropasTerritorio(int tropas, Jugador &jugador) {
         cout << "Territorios\n";
         for (auto &continente: continentes) {
             for (auto &territorio: continente.getTerritorios()) {
-                cout << "ID: " << territorio.getIdTerritorio() << " -> " << territorio.getNombre() << endl;
-                territoriosLeft.insert(territorio.getIdTerritorio());
+                if (territorio.getTropas() == 0) {
+                    territoriosLeft.insert(territorio.getIdTerritorio());
+                    cout << "ID: " << territorio.getIdTerritorio() << " -> " << territorio.getNombre() << endl;
+                }
             }
         }
 
