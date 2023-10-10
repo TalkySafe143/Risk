@@ -4,6 +4,7 @@
 #include "Territorio.h"
 #include "Continente.h"
 #include <list>
+#include "Utils.h"
 class Jugador {
 private:
     list<Carta> cartas;
@@ -21,6 +22,8 @@ public:
     [[nodiscard]] const list<Territorio> &getTerritorios() const;
 
     void setTerritorios(const list<Territorio> &territorios);
+
+    void agregarTerritorio(Territorio nuevo);
 
     [[nodiscard]] const string &getId() const;
 

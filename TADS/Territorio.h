@@ -7,6 +7,9 @@ using namespace std;
 
 class Territorio {
 public:
+
+    bool operator < (const Territorio& a, const Territorio& b) { return a.getIdTerritorio() < b.getIdTerritorio() };
+
     [[nodiscard]] const string &getIdTerritorio() const;
 
     void setIdTerritorio(const string &idTerritorio);

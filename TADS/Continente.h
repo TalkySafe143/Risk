@@ -23,6 +23,28 @@ public:
 
     void setTerritorios(const list<Territorio> &territorios);
 
+    /**
+    * Esta funcion tiene como proposito agregar un nuevo territorio al continente
+    * @param nuevo El territorio nuevo a agregar
+    */
+    void agregarTerritorio(Territorio nuevo);
+
+    /**
+    * Esta funcion tiene como proposito eliminar un territorio en especifico
+    * @param eliminar El territorio que se requiere eliminar
+    * @return Un codigo de estado
+    *       1: Todo salio bien
+    *       -1: Algo salio mal
+    */
+    int eliminarTerritorio(Territorio eliminar);
+
+    /**
+    * Esta funcion tiene como proposito encontrar y retornar un territorio del continente
+    * @param id El ID del territorio a buscar
+    * @return El territorio encontrado, si no existe en el continente, el nombre del territorio va a ser "-1"
+    */
+    Territorio encontrarTerritorio(string id);
+
 private:
     string id;
     string nombre;

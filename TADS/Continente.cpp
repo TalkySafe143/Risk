@@ -27,3 +27,32 @@ const list<Territorio> &Continente::getTerritorios() const {
 void Continente::setTerritorios(const list<Territorio> &territorios) {
     Continente::territorios = territorios;
 }
+
+void agregarTerritorio(Territorio nuevo) {
+    Continente::territorios.push_back(nuevo);
+}
+
+int eliminarTerritorio(Territorio eliminar) {
+    list<Territorio>::iterator it = Continente::territorios.begin();
+
+    for (; it != Continente::territorios.end(); it++) {
+        if (eliminar.getIdTerritorio() == it->getIdTerritorio()) {
+            Continente::territorios.erase(it);
+            return 1;
+        }
+    }
+
+    return -1;
+}
+
+Territorio encontrarTerritorio(string id) {
+    for (Territorio territorio: Continente::territorios) {
+        if (territorio.getIdTerritorio() == id) {
+            return territorio;
+        }
+    }
+    Territorio notFound;
+    notFound.setNombre("-1");
+
+    return notFound;
+}

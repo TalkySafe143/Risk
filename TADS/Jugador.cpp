@@ -43,3 +43,32 @@ const string &Jugador::getColor() const {
 void Jugador::setColor(const string &color) {
     Jugador::color = color;
 }
+
+list<Continente> verificarContinentes(list<Continente> base) {
+    list<Continente> occuped;
+
+    for (Continente continente: base) {
+        if (Utils::compareFieldLists(Jugador::getTerritorios(), continente.getTerritorios())) {
+            occuped.push_back(continente);
+        }
+    }
+
+    return occuped;
+}
+
+
+int modificarTropasTerritorio(Territorio field, int num) {
+    for (Territorio territorio: Jugador::getTerritorios()) {
+        if (territorio.getIdTerritorio() == field.getIdTerritorio()) {
+            territorio.setTropas(territorio.getTropas() + num);
+            return 1;
+        }
+    }
+
+    return -1;
+}
+
+
+void agregarTerritorio(Territorio nuevo) {
+    Jugador::territorios.push_back(nuevo);
+}
