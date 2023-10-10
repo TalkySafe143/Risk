@@ -1,6 +1,9 @@
 #include <iostream>
 #include "TADS/Territorio.h"
 #include "TADS/Jugador.h"
+#include "TADS/ArbBin.h"
+#include "TADS/nodoB.h"
+
 using namespace std;
 
 enum StringOptions {
@@ -16,7 +19,6 @@ StringOptions evalString(string a) {
 }
 
 int main() {
-
     system("ascii-image-converter title.png -f -b --dither -C");
     cout << "Ingrese su comando: ";
     list<string> command;

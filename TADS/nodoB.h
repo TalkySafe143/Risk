@@ -15,7 +15,7 @@ class NodoB
         NodoB<T> *der; //!< Member variable "der"
     public:
         NodoB();//constructor
-        NodoB(T m_info );//constructor
+        NodoB(T m_info );//constructor con info
         NodoB(T m_info, NodoB<T> m_izq  , NodoB<T> m_der  );//constructor
         T Getinfo();//Devuelve la info de un nodo
         NodoB<T> * GetIzq();//Devuelve sub-arbol izquierdo
