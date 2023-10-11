@@ -107,7 +107,7 @@ public:
 
     void setContinentes(const list<Continente> &continentes);
 
-    const list<Carta> &getCartas() const;
+    list<Carta> getCartas();
 
     void setCartas(const list<Carta> &cartas);
 
