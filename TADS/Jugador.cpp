@@ -12,7 +12,7 @@ void Jugador::setCartas(const list<Carta> &cartas) {
     Jugador::cartas = cartas;
 }
 
-const list<Territorio> &Jugador::getTerritorios() const {
+list<Territorio> &Jugador::getTerritorios() {
     return territorios;
 }
 
