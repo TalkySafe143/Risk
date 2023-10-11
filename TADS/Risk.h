@@ -10,6 +10,7 @@
 #include "Jugador.h"
 #include "Carta.h"
 #include "Continente.h"
+#include <sstream>
 
 using namespace std;
 
@@ -34,7 +35,7 @@ public:
      * Esta funcion tiene como objetivo inicializar los jugadores desde un archivo
      * de configuracion
      * @param file El nombre del archivo de configuracion
-     * @return Una lista de jugadores inicializados
+     * @return Una lista de jugadores inicializados, en caso de que algo salga mal, retorna una lista vacia
     */
     list<Jugador> inicializarJugadores(string file);
 
@@ -42,7 +43,7 @@ public:
      * Esta funcion tiene como proposito simular las jugadas desde un archivo
      * @param file El nombre del archivo de las jugadas
     */
-    void simularJugadas(string file);
+    void simularJugadas(string file); // ?
 
     /**
      * Esta funcion tiene como proposito iniciar formalmente el juego con los jugadores
@@ -62,7 +63,7 @@ public:
      * relacionado con las posibles combinaciones de las cartas que posea el jugador
      * @return La cantidad de cartas que el turno actual puede reclamar
      */
-    int intercambiarCartas();
+    int intercambiarCartas(); // Preguntar ¿grupos?
 
     /**
      * Esta funcion tiene como proposito obtener todos los territorios vecinos que puede

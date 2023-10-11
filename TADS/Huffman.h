@@ -19,6 +19,17 @@ class Huffman {
 private:
     ArbBin<NodoB<FreqChar>> tree;
 public:
+
+    /**
+     * Esta funcion tiene como objetivo escribir un archivo de texto para guardar el progreso del juego
+     * @param game Es la partida actual que se esta jugando
+     * @param file Es el nombre del archivo deseado para guardar partida
+     * @return Un codigo de estado
+     *      1: Si todo salió bien
+     *      -1: Si alog salio mal
+    */
+    int guardarPartida(Risk game, string file);
+
     /**
      * Esta funcion tiene como proposito contruir el arbol de Huffman
      * @param freq La frecuencia de los caracteres del archivo de configuracion
