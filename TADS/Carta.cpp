@@ -31,3 +31,5 @@ int Carta::getValue() const {
 void Carta::setValue(int value) {
     Carta::value = value;
 }
+
+

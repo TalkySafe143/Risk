@@ -10,6 +10,7 @@
 #include <map>
 
 using namespace std;
+
 struct FreqChar {
     char c;
     int freq;
