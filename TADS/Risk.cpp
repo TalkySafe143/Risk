@@ -20,7 +20,7 @@ void Risk::setContinentes(const list<Continente> &continentes) {
     Risk::continentes = continentes;
 }
 
-const list<Carta> &Risk::getCartas() const {
+list<Carta> Risk::getCartas() {
     return cartas;
 }
 
