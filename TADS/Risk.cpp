@@ -186,6 +186,60 @@ void iniciarJuego(list<Jugador> jugadores) {
     Risk::turno = Risk::jugadores.begin();
 }
 
+list<int> tirarDados(int numDados) {
+    // Verifica que el número de dados sea válido (1-3 para ataque, 1-2 para defensa)
+    if (numDados < 1 || numDados > 3) {
+        cout << "Numero de dados no valido." << endl;
+        return list<int>(); // Retorna una lista vacía si el número de dados no es válido
+    }
+
+    // Crear un generador de números aleatorios
+    random_device rd;
+    mt19937 gen(rd()); // Mersenne Twister 19937 generator, gen(rd()) se usa para sembrar el generador
+    uniform_int_distribution<> distrib(1, 6); // define el rango
+
+    list<int> resultados;
+
+    for (int i = 0; i < numDados; ++i) {
+        resultados.push_back(distrib(gen)); // genera un número aleatorio y lo agrega a la lista
+    }
+
+
+    resultados.sort();
+    resultados.reverse(); // esto pondrá los números más grandes primero
+
+    return resultados;
+}
+int Risk::reasignarTropas() {
+    // El jugador actual está referenciado por el iterador 'turno'.
+    Jugador& jugadorActual = *turno;
+
+    // Calcular tropas basadas en territorios.
+    int numTerritorios = jugadorActual.getTerritorios().size();
+    int tropasPorTerritorios = max(3, numTerritorios / 3); // Un jugador recibe la mayor cantidad entre 3 o un tercio de sus territorios.
+
+    // Calcular tropas adicionales por continentes controlados.
+    int tropasPorContinentes = 0;
+    for (const Continente& continente : continentes) {
+        bool controlaContinente = true;
+        for (const Territorio& territorio : continente.getTerritorios()) {
+            if (find_if(jugadorActual.getTerritorios().begin(), jugadorActual.getTerritorios().end(),
+                        [&territorio](const Territorio& t) { return t.getIdTerritorio() == territorio.getIdTerritorio(); }) == jugadorActual.getTerritorios().end()) {
+                controlaContinente = false;
+                break;
+            }
+        }
+
+        if (controlaContinente) {
+            // Aquí, debes conocer la cantidad de tropas adicionales que un continente proporciona.
+            // Esto debería ser un atributo de tus objetos Continente. Asumiendo que existe una función 'getTropasAdicionales'.
+            tropasPorContinentes += continente.getTerritorios();
+        }
+    }
+
+    return tropasPorTerritorios + tropasPorContinentes;
+}
+
 int fortificarTerritorio(Territorio from, Territorio to, int tropas) {
     list<Territorio>::iterator fromIt = Risk::turno->getTerritorios().begin();
     list<Territorio>::iterator toIt = Risk::turno->getTerritorios().begin();

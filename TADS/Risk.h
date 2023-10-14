@@ -18,7 +18,7 @@ class Risk {
 private:
     list<Jugador> jugadores;
     list<Continente> continentes;
-    list<Carta> cartas;
+    static list<Carta> cartas;
     list<Jugador>::iterator turno; // Se usa internamente en varios metodos
 public:
     /**
@@ -108,7 +108,7 @@ public:
 
     list<Carta> getCartas();
 
-    void setCartas(const list<Carta> &cartas);
+    static void setCartas(const list<Carta> &cartas);
 
     const list<Jugador>::iterator &getTurno() const;
 
