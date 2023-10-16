@@ -27,4 +27,6 @@ add_executable(Proyecto main.cpp
         TADS/ArbBin.cpp
         TADS/Grafo.cpp
         TADS/Grafo.h
+        TADS/NodoG.cpp
+        TADS/NodoG.h
 )
