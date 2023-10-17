@@ -81,7 +81,7 @@ int main() {
                 //hace lo del turno
 
                 // mira si ya gano (ej: conquistó todos los territorios)
-                if (playerHasWon()) {
+                if (//el jugador ganó) {
                     juegoFinalizado = true;
                     cout << "(Juego terminado) El jugador " << playerId << " ha ganado." << endl;
                 } else {
