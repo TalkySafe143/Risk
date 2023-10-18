@@ -145,3 +145,45 @@ list< T > Grafo<T>::getvertices() {
 
     return vertex;
 }
+
+template< class T >
+list<Grafo<T>> Grafo<T>::componentesConexos(Grafo<T> graph) {
+        list< Grafo<T> > ans;
+        while (true) {
+            int sz = graph.getvertices().size();
+            bool valid = true;
+            int choose = 0;
+            for (int i = 0; i < sz; i++) {
+                if (!graph.MarcadoVertice(i)) { valid = false; choose = i; break; }
+            }
+
+            if (valid) break;
+
+            Grafo<T> nuevo;
+
+            // BFS
+            queue<int> q;
+            q.push(choose);
+            graph.MarcarVertice(choose);
+            while (!q.empty()) {
+                int s = q.front(); q.pop();
+                nuevo.InsVertice(graph.InfoVertice(s));
+                for (auto v: graph.sucesores(s)) {
+                    if (graph.MarcadoVertice(v)) continue;
+                    graph.MarcarVertice(v);
+                    q.push(v);
+                }
+            }
+
+            // Agregar las aristas al nuevo Grafo
+            for (int i = 0; i < nuevo.getvertices().size(); i++) {
+                for (int j = 0; j < nuevo.getvertices().size(); j++) {
+                    if (graph.CostoArco(i, j) != -1) nuevo.InsArco(i, j, graph.CostoArco(i, j));
+                }
+            }
+
+            ans.push_back(nuevo);
+        }
+
+        return ans;
+}
