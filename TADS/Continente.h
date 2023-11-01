@@ -11,15 +11,15 @@ using namespace std;
 
 class Continente {
 public:
-    [[nodiscard]] const string &getId() const;
+    string &getId() const;
 
     void setId(const string &id);
 
-    [[nodiscard]] const string &getNombre() const;
+    string &getNombre() const;
 
     void setNombre(const string &nombre);
 
-    [[nodiscard]] const list<Territorio> &getTerritorios() const;
+    list<Territorio> &getTerritorios() const;
 
     void setTerritorios(const list<Territorio> &territorios);
 
