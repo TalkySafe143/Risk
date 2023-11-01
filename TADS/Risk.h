@@ -61,7 +61,7 @@ public:
     /**
      * Esta funcion tiene como proposito verificar cuantas tropas puede reclamar el turno actual
      * relacionado con las posibles combinaciones de las cartas que posea el jugador
-     * @return La cantidad de cartas que el turno actual puede reclamar
+     * @return Una lista de cartas que el turno actual puede reclamar
      */
     int intercambiarCartas(); // Preguntar ¿grupos?
 

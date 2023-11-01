@@ -1,8 +1,5 @@
-#include <iostream>
-#include "TADS/Territorio.h"
-#include "TADS/Jugador.h"
-#include "TADS/ArbBin.h"
-#include "TADS/nodoB.h"
+#include <bits/stdc++.h>
+#include "TADS/Interfaces.h"
 
 using namespace std;
 
@@ -20,28 +17,28 @@ StringOptions evalString(string a) {
 
 int main() {
     system("ascii-image-converter title.png -f -b --dither -C");
-    cout << "Ingrese su comando: ";
     list<string> command;
     list<string>::iterator it;
-    do { // Segmentation fault
+    Interfaces ui;
+    do {
+        cout << "Ingrese su comando: ";
         command.clear();
         char* str = new char[100];
         cin.getline(str, 50);
 
-        cout << "Antes del switch\n";
         char *p = strtok(str, " ");
-        if (p != nullptr) {
-            while (p != nullptr){
-                command.emplace_back(p);
-                p = strtok(nullptr, " ");
+        if (p != NULL) {
+            while (p != NULL){
+                command.push_back(p);
+                p = strtok(NULL, " ");
             }
         } else {
-            command.emplace_back(str);
+            command.push_back(str);
         }
         it = command.begin();
         switch (evalString(*it)) {
             case inicializar: {
-                
+                ui.inicializarJuego();
                 break;
             }
             case turno: {
@@ -52,6 +49,5 @@ int main() {
                 break;
         }
     } while (*it != "salir");
-    // Este es un cambio para la rama tarjetas
     return 0;
 }

@@ -36,7 +36,7 @@ void Risk::setTurno(const list<Jugador>::iterator &turno) {
     Risk::turno = turno;
 }
 
-int inicializarDatos() {
+int Risk::inicializarDatos() {
     ifstream cards("../Data/Cards.csv");
     list<Carta> nuevasCartas;
 
@@ -116,7 +116,7 @@ int inicializarDatos() {
             if (i == 1) nuevo.setIdTerritorio(token);
             if (i == 2) nuevo.setIdContinente(token);
             if (i == 4) nuevo.setNombre(token);
-            i++:
+            i++;
         }
 
         for (Continente continente: Risk::continentes) {
@@ -132,7 +132,7 @@ int inicializarDatos() {
     return 1;
 }
 
-list<Jugador> inicializarJugadores(string file) {
+list<Jugador> Risk::inicializarJugadores(string file) {
     list<Jugador> result;
     ifstream input(file);
 
@@ -181,12 +181,12 @@ list<Jugador> inicializarJugadores(string file) {
     return result;
 }
 
-void iniciarJuego(list<Jugador> jugadores) {
+void Risk::iniciarJuego(list<Jugador> jugadores) {
     Risk::jugadores = jugadores;
     Risk::turno = Risk::jugadores.begin();
 }
 
-int fortificarTerritorio(Territorio from, Territorio to, int tropas) {
+int Risk::fortificarTerritorio(Territorio from, Territorio to, int tropas) {
     list<Territorio>::iterator fromIt = Risk::turno->getTerritorios().begin();
     list<Territorio>::iterator toIt = Risk::turno->getTerritorios().begin();
     bool fromFounded = false, toFounded = false;
@@ -217,7 +217,7 @@ int fortificarTerritorio(Territorio from, Territorio to, int tropas) {
     return 1;
 }
 
-Jugador avanzarTurno() {
+Jugador Risk::avanzarTurno() {
     Risk::turno++;
     if (Risk::turno == Risk::jugadores.end()) Risk::turno = Risk::jugadores.begin();
     return *(Risk::turno);

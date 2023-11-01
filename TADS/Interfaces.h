@@ -30,7 +30,7 @@ public:
      */
     void asignarTropasTerritorio(int tropas, Jugador &jugador);
 
-    [[nodiscard]] const Risk &getGame() const;
+    Risk &getGame() const;
 
     void setGame(const Risk &game);
 };
