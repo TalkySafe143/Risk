@@ -8,21 +8,21 @@ using namespace std;
 class Territorio {
 public:
 
-    bool operator < (const Territorio& a, const Territorio& b) { return a.getIdTerritorio() < b.getIdTerritorio() };
+    bool operator < (const Territorio& a) { return this->getIdTerritorio() < a.getIdTerritorio(); };
 
-    [[nodiscard]] const string &getIdTerritorio() const;
+    string &getIdTerritorio() const;
 
     void setIdTerritorio(const string &idTerritorio);
 
-    [[nodiscard]] const string &getNombre() const;
+    const string &getNombre() const;
 
     void setNombre(const string &nombre);
 
-    [[nodiscard]] const string &getIdContinente() const;
+    const string &getIdContinente() const;
 
     void setIdContinente(const string &idContinente);
 
-    [[nodiscard]] int getTropas() const;
+    getTropas() const;
 
     void setTropas(int tropas);
 
