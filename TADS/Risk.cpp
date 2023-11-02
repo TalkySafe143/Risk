@@ -187,20 +187,21 @@ list<int> tirarDados(int numDados) {
         return list<int>(); // Retorna una lista vacía si el número de dados no es válido
     }
 
-    // Crear un generador de números aleatorios
-    random_device rd;
-    mt19937 gen(rd()); // Mersenne Twister 19937 generator, gen(rd()) se usa para sembrar el generador
-    uniform_int_distribution<> distrib(1, 6); // define el rango
+    // Inicializa la semilla de los números aleatorios una sola vez.
+    static bool initialized = false;
+    if (!initialized) {
+        srand(time(nullptr)); // Utiliza el tiempo actual como semilla.
+        initialized = true;
+    }
 
     list<int> resultados;
 
     for (int i = 0; i < numDados; ++i) {
-        resultados.push_back(distrib(gen)); // genera un número aleatorio y lo agrega a la lista
+        resultados.push_back(rand() % 6 + 1); // genera un número aleatorio entre 1 y 6 y lo agrega a la lista
     }
 
-
     resultados.sort();
-    resultados.reverse(); // esto pondrá los números más grandes primero
+    resultados.reverse(); // Esto pondrá los números más grandes primero.
 
     return resultados;
 }

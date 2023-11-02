@@ -4,7 +4,7 @@
 
 #include "Utils.h"
 
-static bool Utils::compareFieldLists(list<Territorio> a, list<Territorio> b) {
+ bool Utils::compareFieldLists(list<Territorio> a, list<Territorio> b) {
     if (a.size() != b.size()) return false;
 
     a.sort(); b.sort();
