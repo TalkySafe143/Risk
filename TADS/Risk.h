@@ -94,9 +94,10 @@ public:
     /**
      * El proposito de esta funcion es mover el iterador del turno y reacomodarlo segun la lista
      * de jugadores
+     * @param move es la cantidad de turnos a mover
      * @return El jugador el cual le corresponde el turno
      */
-    Jugador avanzarTurno();
+    Jugador avanzarTurno(int move);
 
     const list<Jugador> &getJugadores() const;
 

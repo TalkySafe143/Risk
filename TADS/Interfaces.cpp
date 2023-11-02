@@ -4,7 +4,7 @@
 
 #include "Interfaces.h"
 
-const Risk &Interfaces::getGame() const {
+Risk &Interfaces::getGame(){
     return game;
 }
 
