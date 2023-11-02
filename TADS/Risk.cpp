@@ -116,7 +116,7 @@ int inicializarDatos() {
             if (i == 1) nuevo.setIdTerritorio(token);
             if (i == 2) nuevo.setIdContinente(token);
             if (i == 4) nuevo.setNombre(token);
-            i++:
+            i++;
         }
 
         for (Continente continente: Risk::continentes) {
@@ -180,6 +180,80 @@ list<Jugador> inicializarJugadores(string file) {
 
     return result;
 }
+list<int> tirarDados(int numDados) {
+    // Verifica que el número de dados sea válido (1-3 para ataque, 1-2 para defensa)
+    if (numDados < 1 || numDados > 3) {
+        cout << "Numero de dados no valido." << endl;
+        return list<int>(); // Retorna una lista vacía si el número de dados no es válido
+    }
+
+    // Crear un generador de números aleatorios
+    random_device rd;
+    mt19937 gen(rd()); // Mersenne Twister 19937 generator, gen(rd()) se usa para sembrar el generador
+    uniform_int_distribution<> distrib(1, 6); // define el rango
+
+    list<int> resultados;
+
+    for (int i = 0; i < numDados; ++i) {
+        resultados.push_back(distrib(gen)); // genera un número aleatorio y lo agrega a la lista
+    }
+
+
+    resultados.sort();
+    resultados.reverse(); // esto pondrá los números más grandes primero
+
+    return resultados;
+}
+void simularJugada(string jugada) {
+    stringstream ss(jugada);
+    string atacanteStr, defensorStr;
+
+    getline(ss, atacanteStr, ':');
+    getline(ss, defensorStr, ':');
+
+    int atacante = stoi(atacanteStr); // Convertir string a int.
+    int defensor = stoi(defensorStr); // Convertir string a int.
+
+    // Limitar el número de dados de acuerdo a las reglas de Risk.
+    atacante = min(atacante, 3);
+    defensor = min(defensor, 2);
+
+    // Lanzar dados.
+    list<int> dadosAtacante = tirarDados(atacante);
+    list<int> dadosDefensor = tirarDados(defensor);
+
+    // Simular el combate.
+    int ejercitosPerdidosAtacante = 0;
+    int ejercitosPerdidosDefensor = 0;
+
+    auto itAtacante = dadosAtacante.begin();
+    auto itDefensor = dadosDefensor.begin();
+
+    while (itAtacante != dadosAtacante.end() && itDefensor != dadosDefensor.end()) {
+        if (*itAtacante > *itDefensor) {
+            ejercitosPerdidosDefensor++;
+        } else {
+            ejercitosPerdidosAtacante++;
+        }
+        ++itAtacante;
+        ++itDefensor;
+    }
+
+    // Mostrar los resultados.
+    cout << "Atacante lanza: ";
+    for (int dado : dadosAtacante) {
+        cout << dado << " ";
+    }
+
+    cout << "\nDefensor lanza: ";
+    for (int dado : dadosDefensor) {
+        cout << dado << " ";
+    }
+
+    cout << "\nResultados: Atacante pierde " << ejercitosPerdidosAtacante
+         << " ejércitos. Defensor pierde " << ejercitosPerdidosDefensor << " ejércitos.\n";
+}
+
 void simularJugadas(string file) {
     ifstream archivo(file);
 
@@ -208,30 +282,7 @@ void iniciarJuego(list<Jugador> jugadores) {
     Risk::turno = Risk::jugadores.begin();
 }
 
-list<int> tirarDados(int numDados) {
-    // Verifica que el número de dados sea válido (1-3 para ataque, 1-2 para defensa)
-    if (numDados < 1 || numDados > 3) {
-        cout << "Numero de dados no valido." << endl;
-        return list<int>(); // Retorna una lista vacía si el número de dados no es válido
-    }
 
-    // Crear un generador de números aleatorios
-    random_device rd;
-    mt19937 gen(rd()); // Mersenne Twister 19937 generator, gen(rd()) se usa para sembrar el generador
-    uniform_int_distribution<> distrib(1, 6); // define el rango
-
-    list<int> resultados;
-
-    for (int i = 0; i < numDados; ++i) {
-        resultados.push_back(distrib(gen)); // genera un número aleatorio y lo agrega a la lista
-    }
-
-
-    resultados.sort();
-    resultados.reverse(); // esto pondrá los números más grandes primero
-
-    return resultados;
-}
 int Risk::reasignarTropas() {
     // El jugador actual está referenciado por el iterador 'turno'.
     Jugador& jugadorActual = *turno;
@@ -292,32 +343,32 @@ void retirarCartasUtilizadas(std::list<Carta>& cartas, const std::list<Territori
 
     // Contar las cartas de cada tipo.
     for (const auto& carta : cartas) {
-        if (carta.tipo == "Infanteria") infanteria++;
-        else if (carta.tipo == "Caballeria") caballeria++;
-        else if (carta.tipo == "Artilleria") artilleria++;
-        else if (carta.tipo == "Comodin") comodines++;
+        if (carta.getId() == "Infanteria") infanteria++;
+        else if (carta.getId() == "Caballeria") caballeria++;
+        else if (carta.getId() == "Artilleria") artilleria++;
+        else if (carta.getId() == "Comodin") comodines++;
     }
 
     // Determinar qué cartas retirar.
     std::list<Carta>::iterator it = cartas.begin();
     while (it != cartas.end()) {
         bool cartaEliminada = false;
-        if (comodines > 0 && it->tipo == "Comodin") {
+        if (comodines > 0 && it->getId() == "Comodin") {
             // Eliminar un comodín.
             it = cartas.erase(it);
             comodines--;
             cartaEliminada = true;
-        } else if (infanteria > 0 && it->tipo == "Infanteria") {
+        } else if (infanteria > 0 && it->getId() == "Infanteria") {
             // Eliminar una carta de infantería.
             it = cartas.erase(it);
             infanteria--;
             cartaEliminada = true;
-        } else if (caballeria > 0 && it->tipo == "Caballeria") {
+        } else if (caballeria > 0 && it->getId() == "Caballeria") {
             // Eliminar una carta de caballería.
             it = cartas.erase(it);
             caballeria--;
             cartaEliminada = true;
-        } else if (artilleria > 0 && it->tipo == "Artilleria") {
+        } else if (artilleria > 0 && it->getId() == "Artilleria") {
             // Eliminar una carta de artillería.
             it = cartas.erase(it);
             artilleria--;
@@ -349,7 +400,7 @@ int intercambiarCartas(std::list<Carta>& cartas, const std::list<Territorio>& te
         // Calcula las unidades extra por cartas que coinciden con territorios ocupados
         for (auto& carta : cartas) {
             if (std::any_of(territorios.begin(), territorios.end(), [&carta](const Territorio& territorio) {
-                return carta.getIdTerritorio() == territorio.getNombre() && territorio.ocupado;
+                return carta.getIdTerritorio() == territorio.getNombre() && territorio.getTropas();
             })) {
                 unidades += 2; // Asume que solo se cuentan una vez las unidades extras por cartas/territorios
             }

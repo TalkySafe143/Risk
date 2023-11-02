@@ -16,10 +16,8 @@ using namespace std;
 
 class Risk {
 private:
-    list<Jugador> jugadores;
-    list<Continente> continentes;
     static list<Carta> cartas;
-    list<Jugador>::iterator turno; // Se usa internamente en varios metodos
+    // Se usa internamente en varios metodos
 public:
     /**
      * Esta funcion tiene como proposito inicializar los datos de los continentes
@@ -102,13 +100,15 @@ public:
 
     void retirarCartasUtilizadas(std::list<Carta>& cartas, const std::list<Territorio>& territorios);
 
+    void simularJugada(string jugada);
+
     const list<Jugador> &getJugadores() const;
 
     void setJugadores(const list<Jugador> &jugadores);
 
     const list<Continente> &getContinentes() const;
 
-    void setContinentes(const list<Continente> &continentes);
+    static void setContinentes(const list<Continente> &continentes);
 
     list<Carta> getCartas();
 
@@ -117,6 +117,10 @@ public:
     const list<Jugador>::iterator &getTurno() const;
 
     void setTurno(const list<Jugador>::iterator &turno);
+
+    static list<Continente> continentes;
+    static list<Jugador> jugadores;
+    static list<Jugador>::iterator turno;
 };
 
 
