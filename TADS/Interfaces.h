@@ -32,7 +32,6 @@ public:
 
     Risk &getGame();
 
-
     void setGame(const Risk &game);
 };
 

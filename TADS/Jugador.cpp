@@ -4,7 +4,7 @@
 
 #include "Jugador.h"
 
-list<Carta> Jugador::getCartas() {
+list<Carta> &Jugador::getCartas() {
     return cartas;
 }
 
@@ -12,7 +12,7 @@ void Jugador::setCartas(const list<Carta> &cartas) {
     Jugador::cartas = cartas;
 }
 
-list<Territorio> Jugador::getTerritorios() {
+list<Territorio> &Jugador::getTerritorios() {
     return territorios;
 }
 

@@ -5,23 +5,23 @@
 #include "NodoG.h"
 
 template< class T >
-T NodoG<T>::getData() {
+T &NodoG<T>::getData() {
     return NodoG<T>::data;
 }
 
 template< class T >
-void NodoG<T>::setData(T d) {
+void NodoG<T>::setData(T &d) {
     NodoG<T>::data = d;
 }
 
 template< class T >
-list<pair<NodoG<T>, int>> & NodoG<T>::getAdj() {
+list<pair<reference_wrapper<NodoG<T>>, int>> & NodoG<T>::getAdj() {
     return NodoG<T>::adj;
 }
 
 template< class T >
-void NodoG<T>::addVertex(NodoG<T> n, int cost) {
-    NodoG<T>::adj.push_back({ n, cost });
+void NodoG<T>::addVertex(NodoG<T> &n, int cost) {
+    NodoG<T>::adj.push_back(pair<reference_wrapper<NodoG<T>>, int>(n, cost));
 }
 
 template<class T>
@@ -46,11 +46,21 @@ bool NodoG<T>::getVisited() {
 }
 
 template<class T>
-pair<NodoG<T>, int> NodoG<T>::getAdjacentVertex(NodoG<T> s) {
+pair<reference_wrapper<NodoG<T>>, int> NodoG<T>::getAdjacentVertex(NodoG<T> s) {
     for (auto &node: NodoG<T>::adj) {
-        if (node.first.getData() == s.getData()) return node;
+        if (node.first.get().getData() == s.getData()) return node;
     }
 
     NodoG<T> a;
-    return pair<NodoG<T>, int>(a, -1);
+    return pair<reference_wrapper<NodoG<T>>, int>(&a, -1);
+}
+
+template<class T>
+void NodoG<T>::changeArcCost(NodoG<T> &a, int c) {
+    for (auto &node: NodoG<T>::adj) {
+        if (node.first.get() == a) {
+            node.second = c;
+            break;
+        }
+    }
 }

@@ -14,16 +14,19 @@ template<class T>
 class NodoG {
 private:
     T data;
-    list< pair< NodoG<T> , int > > adj;
-    bool visited;
+    list< pair< reference_wrapper<NodoG<T>> , int > > adj;
+    bool visited=false;
 public:
+    bool operator ==(NodoG<T> a) {return a.data == this->data;}
     bool getVisited();
     void setVisited(bool value);
-    T getData();
-    void setData(T d);
-    list<pair<NodoG<T>, int>> & getAdj();
-    void addVertex(NodoG<T> n, int cost);
+    T &getData();
+    void setData(T &d);
+    list<pair<reference_wrapper<NodoG<T>>, int>> & getAdj();
+    void addVertex(NodoG<T> &n, int cost);
     void deleteVertex(NodoG<T> del);
-    pair< NodoG<T>, int > getAdjacentVertex(NodoG<T> s);
+    pair< reference_wrapper<NodoG<T>>, int > getAdjacentVertex(NodoG<T> s);
+    void changeArcCost(NodoG<T> &a, int c);
 };
+
 #endif //PROYECTO_NODOG_H

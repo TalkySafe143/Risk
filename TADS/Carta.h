@@ -13,11 +13,11 @@ private:
     bool comodin;
 
 public:
-    string getId();
+    string &getId();
 
     void setId(const string id);
 
-    string getIdTerritorio();
+    string &getIdTerritorio();
 
     void setIdTerritorio(const string idTerritorio);
 

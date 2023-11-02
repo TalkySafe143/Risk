@@ -129,9 +129,30 @@ int Risk::inicializarDatos() {
                 break;
             }
         }
+    }
+    int continents = 0;
+    for (; continents < 6; continents++) {
+        auto contiIt = Risk::continentes.begin();
+        if (continents == 0) {
+            advance(contiIt, 1);
+        } else if (continents == 1) {
+            advance(contiIt, 0);
+        } else if (continents == 2) {
+            advance(contiIt, 3);
+        } else if (continents == 3) {
+            advance(contiIt, 5);
+        } else if (continents == 4) {
+            advance(contiIt, 2);
+        } else if (continents == 5) {
+            advance(contiIt, 4);
+        }
 
-        grafo.InsVertice(nuevo);
-        n++;
+
+        for (auto &terrCont: contiIt->getTerritorios()) {
+            //cout << "Agregado " << terrCont.getNombre() << " con index " << n << endl;
+            grafo.InsVertice(terrCont);
+            //n++;
+        }
     }
     //crear aristas
     //america del norte : 1
@@ -281,7 +302,7 @@ int Risk::inicializarDatos() {
     grafo.InsVertice(6); //40
     grafo.InsVertice(5); //41*/
     //america del sur
-    /*grafo.InsArco(0, 2, 1); grafo.InsArco(2, 0, 1);
+    grafo.InsArco(0, 2, 1); grafo.InsArco(2, 0, 1);
     grafo.InsArco(0, 1, 1); grafo.InsArco(1, 0, 1);
     grafo.InsArco(1, 3, 1); grafo.InsArco(3, 1, 1);
     grafo.InsArco(2, 3, 1); grafo.InsArco(3, 2, 1);
@@ -304,7 +325,7 @@ int Risk::inicializarDatos() {
     grafo.InsArco(10, 11, 1); grafo.InsArco(11, 10, 1);
     grafo.InsArco(11, 12, 1); grafo.InsArco(12, 11, 1);
     //Africa
-    grafo.InsArco(2, 13, 1); grafo.InsArco(13, 2, 1);
+    grafo.InsArco(1, 13, 1); grafo.InsArco(13, 1, 1); // Se conecta con brasil
     grafo.InsArco(13, 14, 1); grafo.InsArco(14, 13, 1);
     grafo.InsArco(13, 15, 1); grafo.InsArco(15, 13, 1);
     grafo.InsArco(14, 16, 1); grafo.InsArco(16, 14, 1);
@@ -361,9 +382,8 @@ int Risk::inicializarDatos() {
     grafo.InsArco(37, 40, 1); grafo.InsArco(40, 37, 1);
     grafo.InsArco(38, 40, 1); grafo.InsArco(40, 38, 1);
     grafo.InsArco(38, 41, 1); grafo.InsArco(41, 38, 1);
-    grafo.InsArco(40, 41, 1); grafo.InsArco(41, 40, 1);*/
+    grafo.InsArco(40, 41, 1); grafo.InsArco(41, 40, 1);
 
-    cout << "Grafoooo\n";
     territorios.close();
 
     return 1;
@@ -404,6 +424,24 @@ list<Jugador> Risk::inicializarJugadores(string file) {
                 Territorio &terr = cont.encontrarTerritorio(id);
                 if (terr.getNombre() == "-1") continue;
                 terr.setTropas(tropas);
+
+                // Obtener todos los sucesores del territorio
+                auto &vertexs = Risk::grafo.getVerticesNode();
+                int u = 0;
+                for (auto &someTerr: vertexs) {
+                    if (terr == someTerr.getData()) {
+                        someTerr.getData().setTropas(tropas);
+                        break;
+                    }
+                    u++;
+                }
+
+                auto neighboors = Risk::grafo.sucesores(u);
+
+                for (int v: neighboors) {
+                    Risk::grafo.changeArcCost(v, u, tropas);
+                }
+
                 jugTerr.push_back(terr);
                 break;
             }

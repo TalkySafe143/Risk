@@ -22,6 +22,7 @@ int main() {
     // inicializar
     Interfaces juego;                   //creo el juego
     bool juegoIniciado = false;
+    bool primerTurno = false;
     bool juegoFinalizado = false;
     do {
         cout << "Ingrese su comando: ";
@@ -30,13 +31,13 @@ int main() {
         cin.getline(str, 50);
 
         char *p = strtok(str, " ");
-        if (p != nullptr) {
-            while (p != nullptr){
-                command.emplace_back(p);
-                p = strtok(nullptr, " ");
+        if (p != NULL) {
+            while (p != NULL){
+                command.push_back(p);
+                p = strtok(NULL, " ");
             }
         } else {
-            command.emplace_back(str);
+            command.push_back(str);
         }
         it = command.begin();
 
