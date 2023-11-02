@@ -25,14 +25,8 @@ int guardarPartida(Risk game, string file) {
     std::ofstream archivo(file);
 
     if (!archivo.is_open()) {
-        std::cout << "La partida no ha sido guardada correctamente." << std::endl;
         return -1;
     }
-
-    // if () {
-    //     std::cout << " Esta partida no ha sido inicializada correctamente." << std::endl;
-    //     return;
-    // }
 
     const std::list<Jugador>& jugadores = game.getJugadores();
     const std::list<Continente>& continentes = game.getContinentes();
@@ -40,6 +34,7 @@ int guardarPartida(Risk game, string file) {
     const std::list<Jugador>::iterator& turno = game.getTurno();
 
     archivo << jugadores.size() << std::endl;
+
     for (const auto& jugador : jugadores) {
         archivo << jugador.getId() << ";" << jugador.getNombre() << ";" << jugador.getColor() << ";";
 
@@ -59,8 +54,6 @@ int guardarPartida(Risk game, string file) {
     }
 
     archivo.close();
-    cout << "La partida ha sido guardada correctamente." << endl;
-
     return 1;
 }
 
@@ -106,7 +99,7 @@ void Huffman::construirArbol(map<char, int> freq){
     }
 }
 
-string obtenerCodigoHuffman(char c, ArbBin<NodoB<FreqChar>> tree) {
+string Huffman::obtenerCodigoHuffman(char c, ArbBin<NodoB<FreqChar>> tree) {
     if (tree.IsEmpty()) {
         return "";
     }
@@ -250,7 +243,7 @@ string Huffman::encode(string file) {
 
     string encodedText;
     for (char c : textContent) {
-      
+
         string huffmanCode = obtenerCodigoHuffman(c, tree);
         encodedText += huffmanCode;
     }
@@ -273,7 +266,7 @@ string Huffman::encode(string file) {
     }
 
     int originalLength = textContent.size();
-
+ 
     outputFile.write(reinterpret_cast<char*>(&originalLength), sizeof(int));
 
     for (size_t i = 0; i < encodedText.size(); i += 8) {
