@@ -5,10 +5,9 @@
 #ifndef PROYECTO_HUFFMAN_H
 #define PROYECTO_HUFFMAN_H
 
-#include <iostream>
 #include "ArbBin.h"
+#include "nodoB.h"
 #include "Risk.h"
-#include <map>
 
 using namespace std;
 
@@ -19,7 +18,7 @@ struct FreqChar {
 
 class Huffman {
 private:
-    ArbBin<NodoB<FreqChar>> tree;
+    ArbBin<NodoB<FreqChar>> tree = *new ArbBin<NodoB<FreqChar>>();
 public:
 
     /**

@@ -8,21 +8,23 @@ using namespace std;
 class Territorio {
 public:
 
-    bool operator < (const Territorio& a, const Territorio& b) { return a.getIdTerritorio() < b.getIdTerritorio() };
+    bool operator == (Territorio a) { return a.getIdTerritorio()==this->getIdTerritorio(); };
 
-    [[nodiscard]] const string &getIdTerritorio() const;
+    bool operator < (Territorio& a) { return this->getIdTerritorio() < a.getIdTerritorio(); };
+
+    string getIdTerritorio();
 
     void setIdTerritorio(const string &idTerritorio);
 
-    [[nodiscard]] const string &getNombre() const;
+    const string &getNombre() const;
 
     void setNombre(const string &nombre);
 
-    [[nodiscard]] const string &getIdContinente() const;
+    const string &getIdContinente() const;
 
     void setIdContinente(const string &idContinente);
 
-    [[nodiscard]] int getTropas() const;
+    int getTropas();
 
     void setTropas(int tropas);
 
@@ -30,7 +32,7 @@ private:
     string idTerritorio;
     string nombre;
     string idContinente;
-    int tropas;
+    int tropas=0;
 };
 
 

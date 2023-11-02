@@ -3,12 +3,11 @@
 //
 
 #include "Huffman.h"
-#include "Risk.h"
-#include "nodoB.h"
+#include "ArbBin.cpp"
+#include "nodoB.cpp"
 #include "Jugador.h"
 #include <iostream>
 #include <fstream>
-
 
 /**
  * Ahí agregué la funcion en el .h, pero toca que tenga cuidado cuando escriba las cartas
@@ -20,7 +19,7 @@
  * Le recomiendo implementar esto a mas tardar el fincho ñero, porque toca comenzar a probar y 
  * mirar errores, si todo funciona bien y corregir, le recomiendo):
 */
-int guardarPartida(Risk game, string file) {
+int Huffman::guardarPartida(Risk game, string file) {
 
     std::ofstream archivo(file);
 
@@ -28,25 +27,25 @@ int guardarPartida(Risk game, string file) {
         return -1;
     }
 
-    const std::list<Jugador>& jugadores = game.getJugadores();
-    const std::list<Continente>& continentes = game.getContinentes();
-    const std::list<Carta>& cartas = game.getCartas();
-    const std::list<Jugador>::iterator& turno = game.getTurno();
+     std::list<Jugador>& jugadores = game.getJugadores();
+     std::list<Continente>& continentes = game.getContinentes();
+     std::list<Carta>& cartas = game.getCartas();
+     std::list<Jugador>::iterator& turno = game.getTurno();
 
     archivo << jugadores.size() << std::endl;
 
-    for (const auto& jugador : jugadores) {
+    for (auto& jugador : jugadores) {
         archivo << jugador.getId() << ";" << jugador.getNombre() << ";" << jugador.getColor() << ";";
 
-        const std::list<Territorio>& territorios = jugador.getTerritorios();
+        const std::list<Territorio> territorios = jugador.getTerritorios();
         archivo << territorios.size() << ";";
-        for (const auto& territorio : territorios) {
+        for (auto territorio : territorios) {
             archivo << territorio.getIdTerritorio() << ";" << territorio.getTropas() << ";";
         }
 
         const std::list<Carta>& cartasJugador = jugador.getCartas();
         archivo << cartasJugador.size() << ";";
-        for (const auto& carta : cartasJugador) {
+        for (auto carta : cartasJugador) {
             archivo << carta.getId() << ";";
         }
 
