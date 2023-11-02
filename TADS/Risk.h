@@ -101,7 +101,7 @@ public:
      */
     Jugador avanzarTurno(int move);
 
-     list<Jugador> getJugadores();
+     list<Jugador> &getJugadores();
 
     void setJugadores(const list<Jugador> &jugadores);
 
@@ -109,11 +109,11 @@ public:
 
     void setContinentes(const list<Continente> &continentes);
 
-    list<Carta> getCartas();
+    list<Carta> &getCartas();
 
     void setCartas(const list<Carta> &cartas);
 
-    const list<Jugador>::iterator &getTurno() const;
+    list<Jugador>::iterator &getTurno();
 
     void setTurno(const list<Jugador>::iterator &turno);
 };

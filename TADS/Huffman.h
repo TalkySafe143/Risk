@@ -5,10 +5,9 @@
 #ifndef PROYECTO_HUFFMAN_H
 #define PROYECTO_HUFFMAN_H
 
-#include <iostream>
-#include "ArbBin.cpp"
+#include "ArbBin.h"
+#include "nodoB.h"
 #include "Risk.h"
-#include <map>
 
 using namespace std;
 
@@ -19,7 +18,7 @@ struct FreqChar {
 
 class Huffman {
 private:
-    ArbBin<NodoB<FreqChar>> tree;
+    ArbBin<NodoB<FreqChar>> tree = *new ArbBin<NodoB<FreqChar>>();
 public:
 
     /**
@@ -36,7 +35,16 @@ public:
      * Esta funcion tiene como proposito contruir el arbol de Huffman
      * @param freq La frecuencia de los caracteres del archivo de configuracion
      */
-    void contruirArbol(map<char, int> freq);
+    void construirArbol(map<char, int> freq);
+
+    /**
+     * Esta funcion tiene como proposito hallar el codigo Huffman correspondiente 
+     * al caracter seleccionado
+     * @param c Caracter seleccionado 
+     * @param tree arbol huffman
+     * @return codigo huffman
+     */
+    string  obtenerCodigoHuffman(char c, ArbBin<NodoB<FreqChar>> tree);
 
     /**
      * Esta funcion tiene como proposito decodificar un archivo binario y escribir un archivo de texto
@@ -59,3 +67,4 @@ public:
 
 
 #endif //PROYECTO_HUFFMAN_H
+

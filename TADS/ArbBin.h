@@ -2,17 +2,21 @@
 // Created by SERGIO on 8/10/2023.
 //
 
-#ifndef ARBBINTAD_ARBBIN_H
-#define ARBBINTAD_ARBBIN_H
+#ifndef ARBBIN_ARBBIN_H
+#define ARBBIN_ARBBIN_H
+#include <bits/stdc++.h>
 #include "nodoB.h"
-
 
 template <class T>
 class ArbBin
 {
 public:
-    ArbBin(); //constructor por omisión
-    ArbBin(const T &); //constructor con info
+    ArbBin() {
+        raiz = nullptr;
+    } //constructor por omisión
+    explicit ArbBin(const T &info){
+        raiz = new NodoB<T>(info);
+    } //constructor con info
     ArbBin(const T &, const ArbBin<T> & , const ArbBin<T> &); //constructor con info y los dos subarboles
     ~ArbBin(); //destructor
     ArbBin(const ArbBin<T> & other); //constructor copia
@@ -50,4 +54,5 @@ protected:
 private:
     NodoB<T> *raiz; //!< Member variable raiz"
 };
-#endif //ARBBINTAD_ARBBIN_H
+
+#endif //ARBBIN_ARBBIN_H

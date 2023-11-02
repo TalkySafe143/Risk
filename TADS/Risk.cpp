@@ -5,7 +5,7 @@
 #include "Risk.h"
 #include "Grafo.cpp"
 
- list<Jugador> Risk::getJugadores()  {
+ list<Jugador> &Risk::getJugadores()  {
     return jugadores;
 }
 
@@ -21,7 +21,7 @@ void Risk::setContinentes(const list<Continente> &continentes) {
     Risk::continentes = continentes;
 }
 
-list<Carta> Risk::getCartas() {
+list<Carta> &Risk::getCartas() {
     return cartas;
 }
 
@@ -29,7 +29,7 @@ void Risk::setCartas(const list<Carta> &cartas) {
     Risk::cartas = cartas;
 }
 
-const list<Jugador>::iterator &Risk::getTurno() const {
+list<Jugador>::iterator &Risk::getTurno() {
     return turno;
 }
 

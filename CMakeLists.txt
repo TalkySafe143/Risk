@@ -3,6 +3,7 @@ project(Proyecto)
 
 set(CMAKE_CXX_STANDARD 20)
 
+
 add_executable(Proyecto main.cpp
         TADS/ArbBin.cpp
         TADS/Carta.cpp
@@ -16,4 +17,17 @@ add_executable(Proyecto main.cpp
         TADS/Risk.cpp
         TADS/Territorio.cpp
         TADS/Utils.cpp
+        TADS/ArbBin.h
+        TADS/Carta.h
+        TADS/Continente.h
+        TADS/Grafo.h
+        TADS/Huffman.h
+        TADS/Interfaces.h
+        TADS/Jugador.h
+        TADS/nodoB.h
+        TADS/NodoG.h
+        TADS/Risk.h
+        TADS/Territorio.h
+        TADS/Utils.h
 )
+

@@ -4,21 +4,11 @@
 
 
 #include "ArbBin.h"
-#include <iostream>
+#include "nodoB.h"
 #include <stdexcept>
 
-// Constructor por omisión
-template <class T>
-ArbBin<T>::ArbBin() {
-    raiz = nullptr;
-}
 
 // Constructor con info
-template <class T>
-ArbBin<T>::ArbBin(const T &info) {
-    raiz = new NodoB<T>(info);
-}
-
 // Constructor con info y los dos subarboles
 template <class T>
 ArbBin<T>::ArbBin(const T &info, const ArbBin<T> &izq, const ArbBin<T> &der) {
@@ -233,4 +223,25 @@ void ArbBin<T>::CopyTree(NodoB<T> *TreePtr, NodoB<T> *&NewTreePtr) const {
     } else {
         NewTreePtr = nullptr;
     }
+}
+
+
+template<class T>
+void ArbBin<T>::GetDerArbBin(ArbBin<T> &) {
+
+}
+
+template<class T>
+void ArbBin<T>::GetIzqArbBin(ArbBin<T> &) {
+
+}
+
+template<class T>
+ArbBin<T> &ArbBin<T>::operator=(const ArbBin<T> &other) {
+    return *(this=other);
+}
+
+template<class T>
+ArbBin<T>::ArbBin(const ArbBin<T> &other) {
+
 }
