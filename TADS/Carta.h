@@ -13,13 +13,21 @@ private:
     bool comodin;
 
 public:
+<<<<<<< HEAD
     string &getId() const;
+=======
+    string getId();
+>>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
 
-    void setId(const string &id);
+    void setId(const string id);
 
+<<<<<<< HEAD
     string &getIdTerritorio() const;
+=======
+    string getIdTerritorio();
+>>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
 
-    void setIdTerritorio(const string &idTerritorio);
+    void setIdTerritorio(const string idTerritorio);
 
     bool isComodin() const;
 

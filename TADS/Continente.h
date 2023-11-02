@@ -11,6 +11,7 @@ using namespace std;
 
 class Continente {
 public:
+<<<<<<< HEAD
     string &getId() const;
 
     void setId(const string &id);
@@ -20,6 +21,17 @@ public:
     void setNombre(const string &nombre);
 
     list<Territorio> &getTerritorios() const;
+=======
+    string getId();
+
+    void setId(const string &id);
+
+    string getNombre();
+
+    void setNombre(const string &nombre);
+
+    list<Territorio> &getTerritorios();
+>>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
 
     void setTerritorios(const list<Territorio> &territorios);
 
@@ -43,12 +55,13 @@ public:
     * @param id El ID del territorio a buscar
     * @return El territorio encontrado, si no existe en el continente, el nombre del territorio va a ser "-1"
     */
-    Territorio encontrarTerritorio(string id);
+    Territorio &encontrarTerritorio(string id);
 
 private:
     string id;
     string nombre;
     list<Territorio> territorios;
+    Territorio notFound;
 };
 
 

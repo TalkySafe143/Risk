@@ -30,7 +30,12 @@ public:
      */
     void asignarTropasTerritorio(int tropas, Jugador &jugador);
 
+<<<<<<< HEAD
     Risk &getGame() const;
+=======
+    Risk &getGame();
+
+>>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
 
     void setGame(const Risk &game);
 };
