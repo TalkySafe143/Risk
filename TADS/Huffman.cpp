@@ -61,43 +61,39 @@ int guardarPartida(Risk game, string file) {
  * Esta funcion tiene como proposito contruir el arbol de Huffman
  * @param freq La frecuencia de los caracteres del archivo de configuracion
  */
-void Huffman::construirArbol(map<char, int> freq){
+void Huffman::construirArbol(map<char, int> freq) {
+    priority_queue<ArbBin<FreqChar>, vector<ArbBin<FreqChar>>, greater<ArbBin<FreqChar>>> pq;
 
-    priority_queue<ArbBin<FreqChar>*, vector<ArbBin<FreqChar>*>, greater<ArbBin<FreqChar>*>> pq;
-    bool dummy;
-   
     for (const auto& pair : freq) {
-        FreqChar freqChar{pair.first, pair.second};
-        ArbBin<FreqChar>* arbNodo = new ArbBin<FreqChar>(freqChar);
+        FreqChar freqChar{ pair.first, pair.second };
+        ArbBin<FreqChar> arbNodo(freqChar);
         pq.push(arbNodo);
     }
 
-   
     while (pq.size() > 1) {
-        ArbBin<FreqChar>* left = pq.top();
+        ArbBin<FreqChar> left = pq.top();
         pq.pop();
-        ArbBin<FreqChar>* right = pq.top();
+        ArbBin<FreqChar> right = pq.top();
         pq.pop();
 
-        FreqChar mergedFreqChar{'#', left->GetInfo().freq + right->GetInfo().freq};
-        ArbBin<FreqChar>* mergedNode = new ArbBin<FreqChar>(mergedFreqChar);
-        mergedNode->CuelgaSubarbolIzq(*left, dummy);
-        mergedNode->CuelgaSubarbolDer(*right, dummy);
+        FreqChar mergedFreqChar{'#', left.GetInfo().freq + right.GetInfo().freq};
+        ArbBin<FreqChar> mergedNode(mergedFreqChar);
+        bool ok;
+        mergedNode.CuelgaSubarbolIzq(left, ok);
+        mergedNode.CuelgaSubarbolDer(right, ok);
         pq.push(mergedNode);
     }
 
     if (!pq.empty()) {
-        ArbBin<FreqChar>* topNode = pq.top();
-        tree.SetInfo(topNode->GetInfo());
-        tree.AgregaIzq(topNode->GetIzqArbBin().GetInfo(), dummy);
-        tree.AgregaDer(topNode->GetDerArbBin().GetInfo(), dummy);
-    }
-
-    while (!pq.empty()) {
-        delete pq.top();
-        pq.pop();
+        ArbBin<FreqChar> topNode = pq.top();
+        tree.SetInfo(topNode.GetInfo());
+        bool ok;
+        tree.CuelgaSubarbolIzq(topNode.GetIzqArbBin(), ok);
+        tree.CuelgaSubarbolDer(topNode.GetDerArbBin(), ok);
     }
 }
+
+
 
 string Huffman::obtenerCodigoHuffman(char c, ArbBin<NodoB<FreqChar>> tree) {
     if (tree.IsEmpty()) {
@@ -126,6 +122,8 @@ string Huffman::obtenerCodigoHuffman(char c, ArbBin<NodoB<FreqChar>> tree) {
 
     return "";
 }
+
+
 
 
 /**
