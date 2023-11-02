@@ -20,15 +20,21 @@ void Grafo<T>::InsVertice(T v) {
 
 template< class T >
 void Grafo<T>::InsArco(int v1, int v2, int c) {
-    auto vertexFrom = Grafo<T>::vertices.begin();
-    auto vertexTo = Grafo<T>::vertices.begin();
-    advance(vertexFrom, v1);
-    advance(vertexTo, v2);
+    int i = 0, j = 0;
 
-    if (vertexTo == Grafo<T>::vertices.end() ||
-    vertexFrom == Grafo<T>::vertices.end()) return;
-
-    vertexFrom->addVertex(*vertexTo, c);
+    for (auto &vertexFrom: Grafo<T>::vertices) {
+        if (i == v1) {
+            for (auto &vertexTo: Grafo<T>::vertices) {
+                if (j == v2) {
+                    vertexFrom.addVertex(vertexTo, c);
+                    break;
+                }
+                j++;
+            }
+            break;
+        }
+        i++;
+    }
 }
 
 template< class T >
@@ -123,10 +129,10 @@ list<int> Grafo<T>::sucesores(int v1) {
     if (vertexFind == Grafo<T>::vertices.end()) return ans;
     auto adjVertex = vertexFind->getAdj();
 
-    for (auto [node, cost]: adjVertex) {
+    for (auto &[node, cost]: adjVertex) {
         int i = 0;
         for (auto vertex: Grafo<T>::vertices) {
-            if (node.getData() == vertex.getData()) {
+            if (node.get().getData() == vertex.getData()) {
                 ans.push_back(i);
                 break;
             }
@@ -187,4 +193,21 @@ list<Grafo<T>> Grafo<T>::componentesConexos(Grafo<T> graph) {
         }
 
         return ans;
+}
+
+
+template<class T>
+void Grafo<T>::changeArcCost(int from, int to, int cNew) {
+    auto fromIt = Grafo<T>::vertices.begin();
+    auto toIt = Grafo<T>::vertices.begin();
+
+    advance(fromIt, from);
+    advance(toIt, to);
+
+    fromIt->changeArcCost(*toIt, cNew);
+}
+
+template<class T>
+list<NodoG<T>>& Grafo<T>::getVerticesNode() {
+    return Grafo<T>::vertices;
 }

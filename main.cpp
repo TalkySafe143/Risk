@@ -22,6 +22,7 @@ int main() {
     // inicializar
     Interfaces juego;                   //creo el juego
     bool juegoIniciado = false;
+    bool primerTurno = false;
     bool juegoFinalizado = false;
     do {
         cout << "Ingrese su comando: ";
@@ -74,7 +75,7 @@ int main() {
                 break;
             }
             case turno: {                      //turno <id_jugador>
-
+                if ()
                 break;
             }
             default:
