@@ -11,17 +11,6 @@ using namespace std;
 
 class Continente {
 public:
-<<<<<<< HEAD
-    string &getId() const;
-
-    void setId(const string &id);
-
-    string &getNombre() const;
-
-    void setNombre(const string &nombre);
-
-    list<Territorio> &getTerritorios() const;
-=======
     string getId();
 
     void setId(const string &id);
@@ -31,7 +20,6 @@ public:
     void setNombre(const string &nombre);
 
     list<Territorio> &getTerritorios();
->>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
 
     void setTerritorios(const list<Territorio> &territorios);
 

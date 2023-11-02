@@ -1,6 +1,6 @@
 #include "Carta.h"
 
-string Carta::getId() {
+string &Carta::getId() {
     return id;
 }
 
@@ -8,7 +8,7 @@ void Carta::setId(const string id) {
     Carta::id = id;
 }
 
-string Carta::getIdTerritorio()  {
+string &Carta::getIdTerritorio()  {
     return idTerritorio;
 }
 

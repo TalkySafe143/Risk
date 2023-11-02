@@ -19,15 +19,11 @@ int main() {
     system("ascii-image-converter title.png -f -b --dither -C");
     list<string> command;
     list<string>::iterator it;
-<<<<<<< HEAD
-    Interfaces ui;
-=======
     // inicializar
     Interfaces juego;                   //creo el juego
     bool juegoIniciado = false;
     bool primerTurno = false;
     bool juegoFinalizado = false;
->>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
     do {
         cout << "Ingrese su comando: ";
         command.clear();
@@ -47,9 +43,6 @@ int main() {
 
         switch (evalString(*it)) {
             case inicializar: {
-<<<<<<< HEAD
-                ui.inicializarJuego();
-=======
 
                 if(!juegoIniciado){
 
@@ -79,11 +72,10 @@ int main() {
                 }else{
                     cout << "(Juego en curso) El juego ya ha sido inicializado." << endl;
                 }
->>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
                 break;
             }
             case turno: {                      //turno <id_jugador>
-                if ()
+
                 break;
             }
             default:

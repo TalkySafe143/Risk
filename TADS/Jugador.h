@@ -13,39 +13,23 @@ private:
     string nombre;
     string color;
 public:
-<<<<<<< HEAD
-    list<Carta> &getCartas() const;
-=======
-    list<Carta> getCartas();
->>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
 
+    list<Carta> &getCartas();
     void setCartas(const list<Carta> &cartas);
 
     void agregarCarta(const Carta carta);
 
-<<<<<<< HEAD
     list<Territorio> &getTerritorios();
-=======
-    list<Territorio> getTerritorios();
->>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
 
     void setTerritorios(const list<Territorio> &territorios);
 
     void agregarTerritorio(Territorio nuevo);
 
-<<<<<<< HEAD
-    string &getId() const;
-
-    void setId(const string &id);
-
-    string &getNombre() const;
-=======
     string getId();
 
     void setId(const string &id);
 
     string getNombre();
->>>>>>> 34f2d73d36b793457887af9e65bcb0dff9b11520
 
     void setNombre(const string &nombre);
 
