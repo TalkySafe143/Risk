@@ -133,6 +133,104 @@ int Risk::inicializarDatos() {
         grafo.InsVertice(nuevo);
         n++;
     }
+    //crear aristas
+    //america del norte : 1
+    grafo.InsArco(0, 7, 1); grafo.InsArco(7, 0, 1);
+    grafo.InsArco(7, 4, 1); grafo.InsArco(4, 7, 1);
+    grafo.InsArco(0, 1, 1); grafo.InsArco(1, 0, 1);
+    grafo.InsArco(1, 7, 1); grafo.InsArco(7, 1, 1);
+    grafo.InsArco(5, 7, 1); grafo.InsArco(7, 5, 1);
+    grafo.InsArco(5, 4, 1); grafo.InsArco(4, 5, 1);
+    grafo.InsArco(6, 4, 1); grafo.InsArco(4, 6, 1);
+    grafo.InsArco(1, 5, 1); grafo.InsArco(5, 1, 1);
+    grafo.InsArco(5, 6, 1); grafo.InsArco(6, 5, 1);
+    grafo.InsArco(2, 1, 1); grafo.InsArco(1, 2, 1);
+    grafo.InsArco(2, 5, 1); grafo.InsArco(5, 2, 1);
+    grafo.InsArco(3, 5, 1); grafo.InsArco(5, 3, 1);
+    grafo.InsArco(3, 6, 1); grafo.InsArco(6, 3, 1);
+    grafo.InsArco(2, 3, 1); grafo.InsArco(3, 2, 1);
+    grafo.InsArco(8, 2, 1); grafo.InsArco(2, 8, 1);
+    grafo.InsArco(8, 3, 1); grafo.InsArco(3, 8, 1);
+    //america del norte - america del sur
+    grafo.InsArco(8, 12, 1); grafo.InsArco(12, 8, 1);
+    //america del sur : 2
+    grafo.InsArco(12, 11, 1); grafo.InsArco(11, 12, 1);
+    grafo.InsArco(12, 10, 1); grafo.InsArco(10, 12, 1);
+    grafo.InsArco(11, 10, 1); grafo.InsArco(10, 11, 1);
+    grafo.InsArco(11, 9, 1); grafo.InsArco(9, 11, 1);
+    grafo.InsArco(10, 9, 1); grafo.InsArco(9, 10, 1);
+    //europa - america del norte
+    grafo.InsArco(4, 18, 1); grafo.InsArco(18, 4, 1);
+    //europa : 3
+    grafo.InsArco(18, 13, 1); grafo.InsArco(13, 18, 1);
+    grafo.InsArco(18, 17, 1); grafo.InsArco(17, 18, 1);
+    grafo.InsArco(17, 13, 1); grafo.InsArco(13, 17, 1);
+    grafo.InsArco(17, 16, 1); grafo.InsArco(16, 17, 1);
+    grafo.InsArco(17, 14, 1); grafo.InsArco(14, 17, 1);
+    grafo.InsArco(13, 14, 1); grafo.InsArco(14, 13, 1);
+    grafo.InsArco(13, 19, 1); grafo.InsArco(19, 13, 1);
+    grafo.InsArco(16, 14, 1); grafo.InsArco(14, 16, 1);
+    grafo.InsArco(14, 19, 1); grafo.InsArco(19, 14, 1);
+    grafo.InsArco(16, 15, 1); grafo.InsArco(15, 16, 1);
+    grafo.InsArco(14, 15, 1); grafo.InsArco(15, 14, 1);
+    grafo.InsArco(19, 15, 1); grafo.InsArco(15, 19, 1);
+    //europa - africa
+    grafo.InsArco(20, 16, 1); grafo.InsArco(16, 20, 1);
+    grafo.InsArco(20, 15, 1); grafo.InsArco(15, 20, 1);
+    grafo.InsArco(24, 15, 1); grafo.InsArco(15, 24, 1);
+    //america del sur - africa
+    grafo.InsArco(10, 20, 1); grafo.InsArco(20, 10, 1);
+    //africa : 4
+    grafo.InsArco(20, 24, 1); grafo.InsArco(24, 20, 1);
+    grafo.InsArco(20, 23, 1); grafo.InsArco(23, 20, 1);
+    grafo.InsArco(20, 22, 1); grafo.InsArco(22, 20, 1);
+    grafo.InsArco(24, 22, 1); grafo.InsArco(22, 24, 1);
+    grafo.InsArco(23, 22, 1); grafo.InsArco(22, 23, 1);
+    grafo.InsArco(23, 21, 1); grafo.InsArco(21, 23, 1);
+    grafo.InsArco(22, 21, 1); grafo.InsArco(21, 22, 1);
+    grafo.InsArco(22, 25, 1); grafo.InsArco(25, 22, 1);
+    grafo.InsArco(21, 25, 1); grafo.InsArco(25, 21, 1);
+    //asia - europa
+    grafo.InsArco(36, 19, 1); grafo.InsArco(19, 36, 1);
+    grafo.InsArco(26, 19, 1); grafo.InsArco(19, 26, 1);
+    grafo.InsArco(32, 19, 1); grafo.InsArco(19, 32, 1);
+    grafo.InsArco(32, 15, 1); grafo.InsArco(15, 32, 1);
+    //asia africa
+    grafo.InsArco(32, 24, 1); grafo.InsArco(24, 32, 1);
+    //asia : 5
+    grafo.InsArco(36, 35, 1); grafo.InsArco(35, 36, 1);
+    grafo.InsArco(36, 27, 1); grafo.InsArco(27, 36, 1);
+    grafo.InsArco(26, 27, 1); grafo.InsArco(27, 26, 1);
+    grafo.InsArco(26, 28, 1); grafo.InsArco(28, 26, 1);
+    grafo.InsArco(32, 28, 1); grafo.InsArco(28, 32, 1);
+    grafo.InsArco(32, 26, 1); grafo.InsArco(26, 32, 1);
+    grafo.InsArco(26, 36, 1); grafo.InsArco(36, 26, 1);
+    grafo.InsArco(28, 27, 1); grafo.InsArco(27, 28, 1);
+    grafo.InsArco(27, 35, 1); grafo.InsArco(35, 27, 1);
+    grafo.InsArco(27, 34, 1); grafo.InsArco(34, 27, 1);
+    grafo.InsArco(27, 33, 1); grafo.InsArco(33, 27, 1);
+    grafo.InsArco(33, 35, 1); grafo.InsArco(35, 33, 1);
+    grafo.InsArco(33, 29, 1); grafo.InsArco(29, 33, 1);
+    grafo.InsArco(33, 31, 1); grafo.InsArco(31, 33, 1);
+    grafo.InsArco(33, 30, 1); grafo.InsArco(30, 33, 1);
+    grafo.InsArco(35, 29, 1); grafo.InsArco(29, 35, 1);
+    grafo.InsArco(35, 37, 1); grafo.InsArco(37, 35, 1);
+    grafo.InsArco(29, 37, 1); grafo.InsArco(37, 29, 1);
+    grafo.InsArco(19, 31, 1); grafo.InsArco(31, 29, 1);
+    grafo.InsArco(37, 31, 1); grafo.InsArco(31, 37, 1);
+    grafo.InsArco(31, 30, 1); grafo.InsArco(30, 31, 1);
+    //autralia - asia
+    grafo.InsArco(34, 40, 1); grafo.InsArco(40, 34, 1);
+    //Australia : 6
+    grafo.InsArco(40, 41, 1); grafo.InsArco(41, 40, 1);
+    grafo.InsArco(40, 38, 1); grafo.InsArco(38, 40, 1);
+    grafo.InsArco(41, 38, 1); grafo.InsArco(38, 41, 1);
+    grafo.InsArco(41, 39, 1); grafo.InsArco(38, 39, 1);
+    grafo.InsArco(36, 35, 1); grafo.InsArco(35, 36, 1);
+
+
+
+
     //crear grafo
     //america del sur : 2
     /*grafo.InsVertice(1); //0
