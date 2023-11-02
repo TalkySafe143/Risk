@@ -13,19 +13,19 @@ private:
     bool comodin;
 
 public:
-    [[nodiscard]] const string &getId() const;
+    string &getId();
 
-    void setId(const string &id);
+    void setId(const string id);
 
-    [[nodiscard]] const string &getIdTerritorio() const;
+    string &getIdTerritorio();
 
-    void setIdTerritorio(const string &idTerritorio);
+    void setIdTerritorio(const string idTerritorio);
 
-    [[nodiscard]] bool isComodin() const;
+    bool isComodin() const;
 
     void setComodin(bool comodin);
 
-    [[nodiscard]] int getValue() const;
+    int getValue() const;
 
     void setValue(int value);
 

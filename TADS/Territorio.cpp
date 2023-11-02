@@ -1,6 +1,6 @@
 #include "Territorio.h"
 
-const string &Territorio::getIdTerritorio() const {
+ string Territorio::getIdTerritorio() {
     return idTerritorio;
 }
 
@@ -24,7 +24,7 @@ void Territorio::setIdContinente(const string &idContinente) {
     Territorio::idContinente = idContinente;
 }
 
-int Territorio::getTropas() const {
+int Territorio::getTropas() {
     return tropas;
 }
 

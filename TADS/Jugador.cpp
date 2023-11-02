@@ -4,7 +4,7 @@
 
 #include "Jugador.h"
 
-const list<Carta> &Jugador::getCartas() const {
+list<Carta> &Jugador::getCartas() {
     return cartas;
 }
 
@@ -12,7 +12,7 @@ void Jugador::setCartas(const list<Carta> &cartas) {
     Jugador::cartas = cartas;
 }
 
-const list<Territorio> &Jugador::getTerritorios() const {
+list<Territorio> &Jugador::getTerritorios() {
     return territorios;
 }
 
@@ -20,7 +20,7 @@ void Jugador::setTerritorios(const list<Territorio> &territorios) {
     Jugador::territorios = territorios;
 }
 
-const string &Jugador::getId() const {
+string Jugador::getId() {
     return id;
 }
 
@@ -28,7 +28,7 @@ void Jugador::setId(const string &id) {
     Jugador::id = id;
 }
 
-const string &Jugador::getNombre() const {
+string Jugador::getNombre() {
     return nombre;
 }
 
@@ -44,7 +44,7 @@ void Jugador::setColor(const string &color) {
     Jugador::color = color;
 }
 
-list<Continente> verificarContinentes(list<Continente> base) {
+list<Continente> Jugador::verificarContinentes(list<Continente> base) {
     list<Continente> occuped;
 
     for (Continente continente: base) {
@@ -57,7 +57,7 @@ list<Continente> verificarContinentes(list<Continente> base) {
 }
 
 
-int modificarTropasTerritorio(Territorio field, int num) {
+int Jugador::modificarTropasTerritorio(Territorio field, int num) {
     for (Territorio territorio: Jugador::getTerritorios()) {
         if (territorio.getIdTerritorio() == field.getIdTerritorio()) {
             territorio.setTropas(territorio.getTropas() + num);
@@ -69,6 +69,6 @@ int modificarTropasTerritorio(Territorio field, int num) {
 }
 
 
-void agregarTerritorio(Territorio nuevo) {
+void Jugador::agregarTerritorio(Territorio nuevo) {
     Jugador::territorios.push_back(nuevo);
 }

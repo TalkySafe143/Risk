@@ -1,26 +1,37 @@
-//
+    //
 // Created by SERGIO on 8/10/2023.
 //
 
-#ifndef ARBBINTAD_ARBBIN_H
-#define ARBBINTAD_ARBBIN_H
+#ifndef ARBBIN_ARBBIN_H
+#define ARBBIN_ARBBIN_H
+#include <bits/stdc++.h>
 #include "nodoB.h"
-
 
 template <class T>
 class ArbBin
 {
 public:
-    ArbBin(); //constructor por omisión
-    ArbBin(const T &); //constructor con info
+    ArbBin() {
+        raiz = nullptr;
+    } //constructor por omisión
+    ArbBin(NodoB<T>* NodePtr) {
+        raiz = NodePtr;
+    } // constructor
+    explicit ArbBin(T info){
+        raiz = new NodoB<T>(info);
+    } //constructor con info
     ArbBin(const T &, const ArbBin<T> & , const ArbBin<T> &); //constructor con info y los dos subarboles
-    ~ArbBin(); //destructor
+
+    bool operator <(ArbBin<T>& a) {
+        return this->GetInfo() < a.GetInfo();
+    }
+
     ArbBin(const ArbBin<T> & other); //constructor copia
-    ArbBin& operator=(const ArbBin<T>& other); //sobrecarga del igual
+    ArbBin operator=(const ArbBin<T>& other); //sobrecarga del igual
     bool IsEmpty() const ;  //Retorna true si el arbol esta vacio filas en caso contario
     T GetInfo() const ;     //Retorna la informacion que se encuentra en la raiz
-    ArbBin<T> GetIzqArbBin(); // retorna Copia de subarbol Izquierdo
-    ArbBin<T> GetDerArbBin(); // retorna copia de subarbol derecho
+    ArbBin<T> *GetIzqArbBin(); // retorna Copia de subarbol Izquierdo
+    ArbBin<T> *GetDerArbBin(); // retorna copia de subarbol derecho
 
     /* me devuelve el mismo arbol --son metodos sobrecargados-- */
     void GetIzqArbBin(ArbBin<T> &); // subarbol Izquierdo retorna la direccion de lo que tiene el arbool
@@ -40,7 +51,6 @@ public:
 
 protected:
 
-    ArbBin(NodoB<T> *NodePtr); // constructor
     void CopyTree(NodoB<T> *, NodoB<T> *& ) const; //Copia el arbol a partir de lo que apunta la raiz
     void DestroyTree(NodoB<T>  *& ); //Destruye el arbol liberando el espacio
     void Preorder(NodoB<T>* TreePtr, void (*Visit)(T ));
@@ -50,4 +60,5 @@ protected:
 private:
     NodoB<T> *raiz; //!< Member variable raiz"
 };
-#endif //ARBBINTAD_ARBBIN_H
+
+#endif //ARBBIN_ARBBIN_H

@@ -17,7 +17,20 @@ public:
      * @param b La segunda lista de territorios
      * @return Un booleano indicando si son iguales o no
      */
-    static bool compareFieldLists(list<Territorio> a, list<Territorio> b);
+    static bool compareFieldLists(list<Territorio> a, list<Territorio> b) {
+            if (a.size() != b.size()) return false;
+
+            a.sort(); b.sort();
+
+            list<Territorio>::iterator itA = a.begin();
+            list<Territorio>::iterator itB = b.begin();
+
+            for (; itA != a.end() && itB != b.end(); itA++, itB++) {
+                if (itA->getIdTerritorio() != itB->getIdTerritorio()) return false;
+            }
+
+            return true;
+    }
 
     /**
      * Esta funcion tiene como proposito extraer la frecuencia de los caracteres del archivo de

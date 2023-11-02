@@ -3,11 +3,15 @@
 //
 
 #include "Huffman.h"
-#include "Risk.h"
+#include "ArbBin.cpp"
+#include "nodoB.cpp"
 #include "Jugador.h"
 #include <iostream>
 #include <fstream>
 
+bool cmp(ArbBin<FreqChar>* a, ArbBin<FreqChar>* b) {
+    return a->GetInfo() < b->GetInfo();
+}
 
 /**
  * Ahí agregué la funcion en el .h, pero toca que tenga cuidado cuando escriba las cartas
@@ -19,38 +23,33 @@
  * Le recomiendo implementar esto a mas tardar el fincho ñero, porque toca comenzar a probar y 
  * mirar errores, si todo funciona bien y corregir, le recomiendo):
 */
-int guardarPartida(Risk game, string file) {
+int Huffman::guardarPartida(Risk game, string file) {
 
     std::ofstream archivo(file);
 
     if (!archivo.is_open()) {
-        std::cout << "La partida no ha sido guardada correctamente." << std::endl;
         return -1;
     }
 
-    // if () {
-    //     std::cout << " Esta partida no ha sido inicializada correctamente." << std::endl;
-    //     return;
-    // }
-
-    const std::list<Jugador>& jugadores = game.getJugadores();
-    const std::list<Continente>& continentes = game.getContinentes();
-    const std::list<Carta>& cartas = game.getCartas();
-    const std::list<Jugador>::iterator& turno = game.getTurno();
+     std::list<Jugador>& jugadores = game.getJugadores();
+     std::list<Continente>& continentes = game.getContinentes();
+     std::list<Carta>& cartas = game.getCartas();
+     std::list<Jugador>::iterator& turno = game.getTurno();
 
     archivo << jugadores.size() << std::endl;
-    for (const auto& jugador : jugadores) {
-        archivo << jugador.getId() << ";" << jugador.getNombre() << ";" << jugador.getColor() << ";";
 
-        const std::list<Territorio>& territorios = jugador.getTerritorios();
+    for (auto& jugador : jugadores) {
+        archivo << jugador.getNombre() << ";" << jugador.getColor() << ";";
+
+        const std::list<Territorio> territorios = jugador.getTerritorios();
         archivo << territorios.size() << ";";
-        for (const auto& territorio : territorios) {
+        for (auto territorio : territorios) {
             archivo << territorio.getIdTerritorio() << ";" << territorio.getTropas() << ";";
         }
 
         const std::list<Carta>& cartasJugador = jugador.getCartas();
         archivo << cartasJugador.size() << ";";
-        for (const auto& carta : cartasJugador) {
+        for (auto carta : cartasJugador) {
             archivo << carta.getId() << ";";
         }
 
@@ -58,8 +57,6 @@ int guardarPartida(Risk game, string file) {
     }
 
     archivo.close();
-    cout << "La partida ha sido guardada correctamente." << endl;
-
     return 1;
 }
 
@@ -67,9 +64,66 @@ int guardarPartida(Risk game, string file) {
  * Esta funcion tiene como proposito contruir el arbol de Huffman
  * @param freq La frecuencia de los caracteres del archivo de configuracion
  */
-void Huffman::contruirArbol(map<char, int> freq){
+void Huffman::construirArbol(map<char, int> freq) {
+    deque<ArbBin<FreqChar>*> pq;
 
+    for (auto [c, value]: freq) {
+        pq.push_back(new ArbBin<FreqChar>({ c, value }));
+    }
+
+    sort(pq.begin(), pq.end(), cmp);
+
+    while (pq.size() > 1) {
+        ArbBin<FreqChar>* left = *(pq.begin());
+        pq.erase(pq.begin());
+        ArbBin<FreqChar>* right = *(pq.begin());
+        pq.erase(pq.begin());
+
+        FreqChar mergedFreqChar{'#', left->GetInfo().freq + right->GetInfo().freq};
+        ArbBin<FreqChar>* mergedNode = new ArbBin<FreqChar>(mergedFreqChar);
+        bool ok;
+        mergedNode->CuelgaSubarbolIzq(*left, ok);
+        mergedNode->CuelgaSubarbolDer(*right, ok);
+        pq.push_back(mergedNode);
+    }
+
+    if (!pq.empty()) {
+        ArbBin<FreqChar>* topNode = *(pq.begin());
+
+        ArbBin<FreqChar>* left = topNode->GetIzqArbBin();
+        ArbBin<FreqChar>* der = topNode->GetDerArbBin();
+        tree = new ArbBin<FreqChar>(topNode->GetInfo());
+        bool ok;
+        tree->CuelgaSubarbolIzq(*left, ok);
+        tree->CuelgaSubarbolDer(*der, ok);
+    }
 }
+
+
+
+string Huffman::obtenerCodigoHuffman(char c, ArbBin<FreqChar>* tree, string curr) {
+    if (tree->IsEmpty()) {
+        return curr+'2';
+    }
+
+    if (tree->GetInfo().c == c) {
+        return curr;
+    }
+
+    string l = obtenerCodigoHuffman(c, tree->GetIzqArbBin(), curr + '0');
+    string d = obtenerCodigoHuffman(c, tree->GetDerArbBin(), curr + '1');
+
+    if (l[l.size()-1] != '2') {
+        return l;
+    }
+
+    if (d[d.size()-1] != '2') {
+        return d;
+    }
+
+    return curr + '2';
+}
+
 
 /**
  * Esta funcion tiene como proposito decodificar un archivo binario y escribir un archivo de texto
@@ -78,9 +132,86 @@ void Huffman::contruirArbol(map<char, int> freq){
  * @return El nombre del archivo de texto escrito ("\0" si se produjo un error)
  * LA CLASE QUE LLAME A ESTE METODO TIENE LA RESPONSABILIDAD DE BORRAR EL ARCHIVO DE TEXTO
  */
-string Huffman::decode(string file){
+string Huffman::decode(string file) {
+    // Abrir el archivo binario en modo lectura
+    ifstream inputFile(file, ios::binary);
+    if (!inputFile.is_open()) {
+        cerr << "Error al abrir el archivo binario." << endl;
+        return "\0"; // Devolver una cadena nula para indicar un error
+    }
 
+    // Leer n (cantidad de caracteres diferentes)
+    uint16_t numDistinctChars;
+    inputFile.read(reinterpret_cast<char*>(&numDistinctChars), sizeof(uint16_t));
+
+    // Leer ci y fi para cada carácter y construir el mapa de frecuencias
+    map<char, int> freq;
+    for (uint16_t i = 0; i < numDistinctChars; ++i) {
+        char c;
+        int charFreq;
+        inputFile.read(&c, sizeof(char));
+        inputFile.read(reinterpret_cast<char*>(&charFreq), sizeof(int));
+        freq[c] = charFreq;
+    }
+
+    // Leer w (longitud original del archivo)
+    int originalLength;
+    inputFile.read(reinterpret_cast<char*>(&originalLength), sizeof(int));
+
+    // Construir el árbol de Huffman basado en las frecuencias
+    construirArbol(freq);
+
+    // Decodificar el contenido del archivo binario
+    string decodedText;
+    string bitBuffer;
+    char byte;
+    while (inputFile.read(&byte, sizeof(char))) {
+        // Convertir el byte a una cadena de bits de 8 bits
+        bitset<8> bits(byte);
+        string bitString = bits.to_string();
+        
+        // Agregar los bits al búfer de bits
+        bitBuffer += bitString;
+
+        // Decodificar los caracteres a partir del búfer de bits
+        while (bitBuffer.size() >= 8) {
+            // Tomar los primeros 8 bits del búfer
+            string byteBits = bitBuffer.substr(0, 8);
+            
+            // Convertir los bits a un byte
+            bitset<8> charBits(byteBits);
+            char decodedChar = static_cast<char>(charBits.to_ulong());
+
+            // Agregar el carácter decodificado al texto
+            decodedText += decodedChar;
+
+            // Eliminar los primeros 8 bits del búfer
+            bitBuffer.erase(0, 8);
+        }
+    }
+
+    inputFile.close();
+
+    // Verificar la longitud del texto decodificado
+    if (decodedText.size() != static_cast<size_t>(originalLength)) {
+        cerr << "Error: Longitud del texto decodificado no coincide con la longitud original." << endl;
+        return "\0"; // Devolver una cadena nula para indicar un error
+    }
+
+    // Escribir el texto decodificado en un archivo de texto
+    ofstream outputFile("decoded.txt");
+    if (!outputFile.is_open()) {
+        cerr << "Error al abrir el archivo de texto para escribir la decodificación." << endl;
+        return "\0"; // Devolver una cadena nula para indicar un error
+    }
+
+    outputFile << decodedText;
+    outputFile.close();
+
+    // Devolver el nombre del archivo de texto creado
+    return "decoded.txt";
 }
+
 
 /**
  * Esta funcion tiene como proposito codificar un archivo de texto y escribir un archivo binario
@@ -89,6 +220,63 @@ string Huffman::decode(string file){
  * @return El nombre del archivo binario escrito ("\0" si se produjo un error)
  * LA CLASE QUE LLAME A ESTE METODO TIENE LA RESPONSABILIDAD DE BORRAR EL ARCHIVO DE TEXTO
  */
-string Huffman::encode(string file){
+string Huffman::encode(string file) {
+    
+    ifstream inputFile(file);
+    if (!inputFile.is_open()) {
+        cerr << "Error al abrir el archivo de texto." << endl;
+        return "\0"; 
+    }
 
+    string textContent((istreambuf_iterator<char>(inputFile)), istreambuf_iterator<char>());
+    inputFile.close();
+
+    map<char, int> freq;
+    for (char c : textContent) {
+        freq[c]++;
+    }
+
+    construirArbol(freq);
+
+    string encodedText;
+    for (char c : textContent) {
+
+        string huffmanCode = obtenerCodigoHuffman(c, tree, "");
+        encodedText += huffmanCode;
+    }
+
+    int numDistinctChars = freq.size();
+
+    ofstream outputFile("encoded.bin", ios::binary);
+    if (!outputFile.is_open()) {
+        cerr << "Error al abrir el archivo binario para escribir la codificación." << endl;
+        return "\0";
+    }
+
+    outputFile.write(reinterpret_cast<char*>(&numDistinctChars), sizeof(uint16_t));
+
+    for (const auto& pair : freq) {
+        char c = pair.first;
+        int freq = pair.second;
+        outputFile.write(&c, sizeof(char));
+        outputFile.write(reinterpret_cast<char*>(&freq), sizeof(int));
+    }
+
+    int originalLength = textContent.size();
+ 
+    outputFile.write(reinterpret_cast<char*>(&originalLength), sizeof(int));
+
+    for (size_t i = 0; i < encodedText.size(); i += 8) {
+        string byte = encodedText.substr(i, 8);
+        
+        while (byte.size() < 8) {
+            byte += '0';
+        }
+        bitset<8> bits(byte);
+        char byteValue = static_cast<char>(bits.to_ulong());
+        outputFile.write(&byteValue, sizeof(char));
+    }
+    outputFile.close();
+
+    return "encoded.bin";
 }

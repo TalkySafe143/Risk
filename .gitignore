@@ -1,3 +1,5 @@
 cmake-build-debug/
 .idea/
 enunciado.pdf
+Docs/
+*.o

@@ -7,8 +7,8 @@
 
 template< class T >
 NodoB<T>::NodoB() {
-    this->izq = NULL;
-    this->der = NULL;
+    this->izq = nullptr;
+    this->der = nullptr;
 }
 
 template< class T>
@@ -52,7 +52,7 @@ void NodoB<T>::GetDer(NodoB<T> *&d){
 
 template< class T>
 void NodoB<T>::Setinfo(T val){
-    this->info = val;
+    NodoB<T>::info = val;
 }
 
 template< class T>

@@ -11,13 +11,18 @@
 #include "Carta.h"
 #include "Continente.h"
 #include <sstream>
+#include "Grafo.h"
 
 using namespace std;
 
 class Risk {
 private:
-    static list<Carta> cartas;
     // Se usa internamente en varios metodos
+    list<Jugador> jugadores;
+    list<Continente> continentes;
+    list<Carta> cartas;
+    list<Jugador>::iterator turno; // Se usa internamente en varios metodos
+    Grafo<Territorio> grafo;
 public:
     /**
      * Esta funcion tiene como proposito inicializar los datos de los continentes
@@ -59,7 +64,7 @@ public:
     /**
      * Esta funcion tiene como proposito verificar cuantas tropas puede reclamar el turno actual
      * relacionado con las posibles combinaciones de las cartas que posea el jugador
-     * @return La cantidad de cartas que el turno actual puede reclamar
+     * @return Una lista de cartas que el turno actual puede reclamar
      */
     int intercambiarCartas(); // Preguntar ¿grupos?
 
@@ -92,9 +97,10 @@ public:
     /**
      * El proposito de esta funcion es mover el iterador del turno y reacomodarlo segun la lista
      * de jugadores
+     * @param move es la cantidad de turnos a mover
      * @return El jugador el cual le corresponde el turno
      */
-    Jugador avanzarTurno();
+    Jugador avanzarTurno(int move);
 
     bool esCombinacionValida(std::list<Carta>& cartas);
 
@@ -106,21 +112,19 @@ public:
 
     void setJugadores(const list<Jugador> &jugadores);
 
-    const list<Continente> &getContinentes() const;
+    list<Continente> &getContinentes();
 
     static void setContinentes(const list<Continente> &continentes);
 
-    list<Carta> getCartas();
+    list<Carta> &getCartas();
 
     static void setCartas(const list<Carta> &cartas);
 
-    const list<Jugador>::iterator &getTurno() const;
+    list<Jugador>::iterator &getTurno();
 
     void setTurno(const list<Jugador>::iterator &turno);
 
-    static list<Continente> continentes;
-    static list<Jugador> jugadores;
-    static list<Jugador>::iterator turno;
+    int intercambiarCartas(list<Carta> &cartas, const list<Territorio> &territorios, int &gruposIntercambiados);
 };
 
 
