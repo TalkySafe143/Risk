@@ -6,7 +6,7 @@
 #define PROYECTO_HUFFMAN_H
 
 #include <iostream>
-#include "ArbBin.h"
+#include "ArbBin.cpp"
 #include "Risk.h"
 #include <map>
 

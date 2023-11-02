@@ -19,7 +19,7 @@
  * Le recomiendo implementar esto a mas tardar el fincho ñero, porque toca comenzar a probar y 
  * mirar errores, si todo funciona bien y corregir, le recomiendo):
 */
-int guardarPartida(Risk game, string file) {
+int Huffman::guardarPartida(Risk game, string file) {
 
     std::ofstream archivo(file);
 

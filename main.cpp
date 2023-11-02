@@ -1,17 +1,22 @@
 #include <bits/stdc++.h>
 #include "TADS/Interfaces.h"
+#include "TADS/Huffman.h"
 
 using namespace std;
 
 enum StringOptions {
     inicializar,
     turno,
-    invalido
+    invalido,
+    guardar,
+    guardar_comprimido
 };
 
 StringOptions evalString(string a) {
     if (a == "inicializar") return inicializar;
     else if (a == "turno") return turno;
+    else if (a == "guardar") return guardar;
+    else if (a == "guardar_comprimido") return guardar_comprimido;
     else return invalido;
 }
 
@@ -20,7 +25,8 @@ int main() {
     list<string> command;
     list<string>::iterator it;
     // inicializar
-    Interfaces juego;                   //creo el juego
+    Interfaces juego;
+    Huffman saveGame;
     bool juegoIniciado = false;
     bool primerTurno = false;
     bool juegoFinalizado = false;
@@ -78,6 +84,19 @@ int main() {
 
                 break;
             }
+
+            case guardar: {
+
+                auto file = command.begin();
+                file++;
+                cout << *file << endl;
+                if ( !saveGame.guardarPartida(juego.getGame(), *file) ) {
+                    cout << "Ocurrion algo con el guardado de la partida normal\n";
+                }
+
+                break;
+            }
+
             default:
                 break;
         }
