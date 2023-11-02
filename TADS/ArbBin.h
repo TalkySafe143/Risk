@@ -14,13 +14,20 @@ public:
     ArbBin() {
         raiz = nullptr;
     } //constructor por omisión
-    explicit ArbBin(const T &info){
+    ArbBin(NodoB<T>* NodePtr) {
+        raiz = NodePtr;
+    } // constructor
+    explicit ArbBin(T info){
         raiz = new NodoB<T>(info);
     } //constructor con info
     ArbBin(const T &, const ArbBin<T> & , const ArbBin<T> &); //constructor con info y los dos subarboles
-    ~ArbBin(); //destructor
+
+    bool operator <(ArbBin<T>& a) {
+        return this->GetInfo() < a.GetInfo();
+    }
+
     ArbBin(const ArbBin<T> & other); //constructor copia
-    ArbBin& operator=(const ArbBin<T>& other); //sobrecarga del igual
+    ArbBin operator=(const ArbBin<T>& other); //sobrecarga del igual
     bool IsEmpty() const ;  //Retorna true si el arbol esta vacio filas en caso contario
     T GetInfo() const ;     //Retorna la informacion que se encuentra en la raiz
     ArbBin<T> GetIzqArbBin(); // retorna Copia de subarbol Izquierdo
@@ -44,7 +51,6 @@ public:
 
 protected:
 
-    ArbBin(NodoB<T> *NodePtr); // constructor
     void CopyTree(NodoB<T> *, NodoB<T> *& ) const; //Copia el arbol a partir de lo que apunta la raiz
     void DestroyTree(NodoB<T>  *& ); //Destruye el arbol liberando el espacio
     void Preorder(NodoB<T>* TreePtr, void (*Visit)(T ));

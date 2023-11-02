@@ -14,11 +14,12 @@ using namespace std;
 struct FreqChar {
     char c;
     int freq;
+    bool operator <(FreqChar a){ return this->c < a.c; }
 };
 
 class Huffman {
 private:
-    ArbBin<NodoB<FreqChar>> tree = *new ArbBin<NodoB<FreqChar>>();
+    ArbBin<FreqChar>* tree = new ArbBin<FreqChar>();
 public:
 
     /**
@@ -44,7 +45,7 @@ public:
      * @param tree arbol huffman
      * @return codigo huffman
      */
-    string  obtenerCodigoHuffman(char c, ArbBin<NodoB<FreqChar>> tree);
+    string obtenerCodigoHuffman(char c, ArbBin<FreqChar>* tree);
 
     /**
      * Esta funcion tiene como proposito decodificar un archivo binario y escribir un archivo de texto

@@ -16,13 +16,7 @@ ArbBin<T>::ArbBin(const T &info, const ArbBin<T> &izq, const ArbBin<T> &der) {
 }
 
 // Destructor     ------Lo hago con destroyTree???????
-template <class T>
-ArbBin<T>::~ArbBin() {
-    if (this->raiz != nullptr) {
-        delete this->raiz;
-        this->raiz = nullptr;
-    }
-}
+
 
 /*
 // Constructor copia
@@ -80,11 +74,7 @@ ArbBin<T> ArbBin<T>::GetDerArbBin() {
 // Cambia la información que se encuentra en la raíz
 template <class T>
 void ArbBin<T>::SetInfo(const T info) {
-    if (raiz != nullptr) {
         raiz->Setinfo(info);
-    } else {
-        throw std::runtime_error("El arbol esta vacio");
-    }
 }
 
 // Agrega una hoja a la derecha de la raíz
@@ -208,11 +198,6 @@ void ArbBin<T>::Posorder(NodoB<T>* TreePtr, void (*Visit)(T)) {
 ///-----------    PROTECTED   -----------///
 //
 // Constructor que recibe un puntero a un nodo como raíz
-template <class T>
-ArbBin<T>::ArbBin(NodoB<T> *NodePtr) {
-    raiz = NodePtr;
-}
-
 // Copia el árbol a partir del nodo apuntado por NodePtr
 template <class T>
 void ArbBin<T>::CopyTree(NodoB<T> *TreePtr, NodoB<T> *&NewTreePtr) const {
@@ -237,8 +222,8 @@ void ArbBin<T>::GetIzqArbBin(ArbBin<T> &) {
 }
 
 template<class T>
-ArbBin<T> &ArbBin<T>::operator=(const ArbBin<T> &other) {
-    return *(this=other);
+ArbBin<T> ArbBin<T>::operator=(const ArbBin<T> &other) {
+    return ArbBin<T>();
 }
 
 template<class T>

@@ -9,6 +9,10 @@
 #include <iostream>
 #include <fstream>
 
+bool cmp(ArbBin<FreqChar>* a, ArbBin<FreqChar>* b) {
+    return a->GetInfo() < b->GetInfo();
+}
+
 /**
  * Ahí agregué la funcion en el .h, pero toca que tenga cuidado cuando escriba las cartas
  * Acuerdese que las cartas es por cada jugador en la partida, no de todo el juego
@@ -61,59 +65,62 @@ int Huffman::guardarPartida(Risk game, string file) {
  * @param freq La frecuencia de los caracteres del archivo de configuracion
  */
 void Huffman::construirArbol(map<char, int> freq) {
-    priority_queue<ArbBin<FreqChar>, vector<ArbBin<FreqChar>>, greater<ArbBin<FreqChar>>> pq;
+    deque<ArbBin<FreqChar>*> pq;
 
-    for (const auto& pair : freq) {
-        FreqChar freqChar{ pair.first, pair.second };
-        ArbBin<FreqChar> arbNodo(freqChar);
-        pq.push(arbNodo);
+    for (auto [c, value]: freq) {
+        pq.push_back(new ArbBin<FreqChar>({ c, value }));
     }
 
-    while (pq.size() > 1) {
-        ArbBin<FreqChar> left = pq.top();
-        pq.pop();
-        ArbBin<FreqChar> right = pq.top();
-        pq.pop();
+    sort(pq.begin(), pq.end(), cmp);
 
-        FreqChar mergedFreqChar{'#', left.GetInfo().freq + right.GetInfo().freq};
-        ArbBin<FreqChar> mergedNode(mergedFreqChar);
+    while (pq.size() > 1) {
+        ArbBin<FreqChar>* left = *(pq.begin());
+        pq.erase(pq.begin());
+        ArbBin<FreqChar>* right = *(pq.begin());
+        pq.erase(pq.begin());
+
+        FreqChar mergedFreqChar{'#', left->GetInfo().freq + right->GetInfo().freq};
+        ArbBin<FreqChar>* mergedNode = new ArbBin<FreqChar>(mergedFreqChar);
         bool ok;
-        mergedNode.CuelgaSubarbolIzq(left, ok);
-        mergedNode.CuelgaSubarbolDer(right, ok);
-        pq.push(mergedNode);
+        mergedNode->CuelgaSubarbolIzq(*left, ok);
+        mergedNode->CuelgaSubarbolDer(*right, ok);
+        pq.push_back(mergedNode);
     }
 
     if (!pq.empty()) {
-        ArbBin<FreqChar> topNode = pq.top();
-        tree.SetInfo(topNode.GetInfo());
+        ArbBin<FreqChar>* topNode = *(pq.begin());
+
+        ArbBin<FreqChar> left = topNode->GetIzqArbBin();
+        ArbBin<FreqChar> der = topNode->GetDerArbBin();
+        tree = new ArbBin<FreqChar>(topNode->GetInfo());
         bool ok;
-        tree.CuelgaSubarbolIzq(topNode.GetIzqArbBin(), ok);
-        tree.CuelgaSubarbolDer(topNode.GetDerArbBin(), ok);
+        tree->CuelgaSubarbolIzq(left, ok);
+        tree->CuelgaSubarbolDer(der, ok);
     }
 }
 
 
 
-string Huffman::obtenerCodigoHuffman(char c, ArbBin<NodoB<FreqChar>> tree) {
-    if (tree.IsEmpty()) {
+string Huffman::obtenerCodigoHuffman(char c, ArbBin<FreqChar>* tree) {
+    if (tree->IsEmpty()) {
         return "";
     }
 
-    ArbBin<NodoB<FreqChar>> subarbolIzquierdo = tree.GetIzqArbBin();
-    if (!subarbolIzquierdo.IsEmpty() && subarbolIzquierdo.GetInfo().Getinfo().c == c) {
+    ArbBin<FreqChar> subarbolIzquierdo = tree->GetIzqArbBin();
+    if (!subarbolIzquierdo.IsEmpty() && subarbolIzquierdo.GetInfo().c == c) {
         return "0";
     } else if (!subarbolIzquierdo.IsEmpty()) {
-        string leftCode = obtenerCodigoHuffman(c, subarbolIzquierdo);
+        string leftCode = obtenerCodigoHuffman(c, &subarbolIzquierdo);
         if (!leftCode.empty()) {
             return "0" + leftCode;
         }
     }
 
-    ArbBin<NodoB<FreqChar>> subarbolDerecho = tree.GetDerArbBin();
-    if (!subarbolDerecho.IsEmpty() && subarbolDerecho.GetInfo().Getinfo().c == c) {
+    auto subarbolDerecho = tree->GetDerArbBin();
+    if (!subarbolDerecho.IsEmpty() && subarbolDerecho.GetInfo().c == c) {
         return "1";
     } else if (!subarbolDerecho.IsEmpty()) {
-        string rightCode = obtenerCodigoHuffman(c, subarbolDerecho);
+        string rightCode = obtenerCodigoHuffman(c, &subarbolDerecho);
         if (!rightCode.empty()) {
             return "1" + rightCode;
         }

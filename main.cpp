@@ -9,7 +9,8 @@ enum StringOptions {
     turno,
     invalido,
     guardar,
-    guardar_comprimido
+    guardar_comprimido,
+    inicializar_comprimido
 };
 
 StringOptions evalString(string a) {
@@ -17,6 +18,7 @@ StringOptions evalString(string a) {
     else if (a == "turno") return turno;
     else if (a == "guardar") return guardar;
     else if (a == "guardar_comprimido") return guardar_comprimido;
+    else if (a == "inicializar_comprimido") return inicializar_comprimido;
     else return invalido;
 }
 
@@ -110,6 +112,16 @@ int main() {
                 }
 
                 cout << "Se ha guardado el archivo con el nombre: " << fileCompress << endl;
+
+                break;
+            }
+
+            case inicializar_comprimido: {
+
+                auto it = command.begin();
+                it++;
+
+                cout << "Se ha escrito el archivo en " << saveGame.decode(*it) << endl;
 
                 break;
             }
