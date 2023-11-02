@@ -3,6 +3,7 @@
 //
 
 #include "Grafo.h"
+#include "NodoG.cpp"
 
 template< class T >
 void Grafo<T>::InsVertice(T v) {

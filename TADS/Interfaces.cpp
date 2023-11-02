@@ -101,7 +101,7 @@ void Interfaces::inicializarJuego() {
 }
 
 void Interfaces::asignarTropasTerritorio(int tropas, Jugador &jugador) {
-    list<Continente> continentes = Interfaces::game.getContinentes();
+    list<Continente> &continentes = Interfaces::game.getContinentes();
 
     set<string> territoriosLeft;
     bool valid = false;
@@ -127,8 +127,8 @@ void Interfaces::asignarTropasTerritorio(int tropas, Jugador &jugador) {
             system("cls");
             continue;
         }
-        for (auto continente: continentes) {
-            for (auto territorio: continente.getTerritorios()) {
+        for (auto &continente: continentes) {
+            for (auto &territorio: continente.getTerritorios()) {
                 if (idTerritorio == territorio.getIdTerritorio()) {
                     territorio.setTropas(tropas);
                     jugador.agregarTerritorio(territorio);

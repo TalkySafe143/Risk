@@ -1,18 +1,18 @@
 #include "Carta.h"
 
-const string &Carta::getId() const {
+string Carta::getId() {
     return id;
 }
 
-void Carta::setId(const string &id) {
+void Carta::setId(const string id) {
     Carta::id = id;
 }
 
-const string &Carta::getIdTerritorio() const {
+string Carta::getIdTerritorio()  {
     return idTerritorio;
 }
 
-void Carta::setIdTerritorio(const string &idTerritorio) {
+void Carta::setIdTerritorio(const string idTerritorio) {
     Carta::idTerritorio = idTerritorio;
 }
 

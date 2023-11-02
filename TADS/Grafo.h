@@ -5,7 +5,7 @@
 #ifndef PROYECTO_GRAFO_H
 #define PROYECTO_GRAFO_H
 
-#include<iostream>
+#include<bits/stdc++.h>
 #include<list>
 #include <queue>
 #include "NodoG.h"
@@ -17,7 +17,6 @@ class Grafo
 private:
     list< NodoG<T> > vertices;//la posición en la lista corresponde al número de vértice.
 public:
-    Grafo();  //Constructor por omisión
     void InsVertice( T v ); //Agregar vértice v al final de la lista de vértices con Infovertice de tipo T.
     void InsArco(int v1, int v2,int c); // inserta un arco con costo c entre los vértices v1 y v2
     void ElimArco(int v1,int v2); //Elimina el arco entre los vértices v1 y v2

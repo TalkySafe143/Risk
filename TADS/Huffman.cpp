@@ -33,24 +33,24 @@ int guardarPartida(Risk game, string file) {
     //     return;
     // }
 
-    const std::list<Jugador>& jugadores = game.getJugadores();
+    const std::list<Jugador> jugadores = game.getJugadores();
     const std::list<Continente>& continentes = game.getContinentes();
     const std::list<Carta>& cartas = game.getCartas();
     const std::list<Jugador>::iterator& turno = game.getTurno();
 
     archivo << jugadores.size() << std::endl;
-    for (const auto& jugador : jugadores) {
+    for (auto jugador : jugadores) {
         archivo << jugador.getId() << ";" << jugador.getNombre() << ";" << jugador.getColor() << ";";
 
-        const std::list<Territorio>& territorios = jugador.getTerritorios();
+        const std::list<Territorio> territorios = jugador.getTerritorios();
         archivo << territorios.size() << ";";
-        for (const auto& territorio : territorios) {
+        for (auto territorio : territorios) {
             archivo << territorio.getIdTerritorio() << ";" << territorio.getTropas() << ";";
         }
 
         const std::list<Carta>& cartasJugador = jugador.getCartas();
         archivo << cartasJugador.size() << ";";
-        for (const auto& carta : cartasJugador) {
+        for (auto carta : cartasJugador) {
             archivo << carta.getId() << ";";
         }
 

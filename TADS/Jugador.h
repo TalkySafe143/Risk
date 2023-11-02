@@ -13,23 +13,23 @@ private:
     string nombre;
     string color;
 public:
-    list<Carta> &getCartas() const;
+    list<Carta> getCartas();
 
     void setCartas(const list<Carta> &cartas);
 
     void agregarCarta(const Carta carta);
 
-    list<Territorio> &getTerritorios();
+    list<Territorio> getTerritorios();
 
     void setTerritorios(const list<Territorio> &territorios);
 
     void agregarTerritorio(Territorio nuevo);
 
-    string &getId() const;
+    string getId();
 
     void setId(const string &id);
 
-    string &getNombre() const;
+    string getNombre();
 
     void setNombre(const string &nombre);
 

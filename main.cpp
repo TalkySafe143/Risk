@@ -44,7 +44,28 @@ int main() {
             case inicializar: {
 
                 if(!juegoIniciado){
-                    juego.inicializarJuego();
+
+                    if (!juego.getGame().inicializarDatos()) {
+                        cout << "Algo salio mal inicializando los datos\n";
+                        break;
+                    }
+
+                    int initOption = -1;
+                    do {
+                        cout << "¿Desea inicializarlo con un archivo?: [1 -> YES / 0 -> NO]: ";
+                        cin >> initOption;
+                    } while (initOption != 1 && initOption != 0);
+
+                    if (initOption == 1) {
+                        string fileName;
+                        cout << "Escriba el nombre del archivo para inicializar el juego: ";
+                        cin >> fileName;
+                        juego.getGame().iniciarJuego(
+                                juego.getGame().inicializarJugadores(fileName)
+                                );
+                    } else {
+                        juego.inicializarJuego();
+                    }
                     juegoIniciado = true;
                     cout << "(Inicialización satisfactoria) El juego se ha inicializado correctamente." << endl;
                 }else{

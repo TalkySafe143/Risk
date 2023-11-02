@@ -11,6 +11,7 @@
 #include "Carta.h"
 #include "Continente.h"
 #include <sstream>
+#include "Grafo.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ private:
     list<Continente> continentes;
     list<Carta> cartas;
     list<Jugador>::iterator turno; // Se usa internamente en varios metodos
+    Grafo<Territorio> grafo;
 public:
     /**
      * Esta funcion tiene como proposito inicializar los datos de los continentes
@@ -99,11 +101,11 @@ public:
      */
     Jugador avanzarTurno(int move);
 
-    const list<Jugador> &getJugadores() const;
+     list<Jugador> getJugadores();
 
     void setJugadores(const list<Jugador> &jugadores);
 
-    const list<Continente> &getContinentes() const;
+    list<Continente> &getContinentes();
 
     void setContinentes(const list<Continente> &continentes);
 

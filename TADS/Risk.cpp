@@ -3,9 +3,9 @@
 //
 
 #include "Risk.h"
-#include "Grafo.h"
+#include "Grafo.cpp"
 
-const list<Jugador> &Risk::getJugadores() const {
+ list<Jugador> Risk::getJugadores()  {
     return jugadores;
 }
 
@@ -13,7 +13,7 @@ void Risk::setJugadores(const list<Jugador> &jugadores) {
     Risk::jugadores = jugadores;
 }
 
-const list<Continente> &Risk::getContinentes() const {
+ list<Continente> &Risk::getContinentes()  {
     return continentes;
 }
 
@@ -38,6 +38,7 @@ void Risk::setTurno(const list<Jugador>::iterator &turno) {
 }
 
 int Risk::inicializarDatos() {
+    cout << "Inicializando...\n";
     ifstream cards("../Data/Cards.csv");
     list<Carta> nuevasCartas;
 
@@ -75,14 +76,14 @@ int Risk::inicializarDatos() {
 
     cards.close();
 
-    ifstream continentes("../Data/Continentes.csv");
+    ifstream continentess("../Data/Continentes.csv");
     list<Continente> nuevosContinentes;
 
-    if (!continentes) return -1;
+    if (!continentess) return -1;
 
-    getline(continentes, line); // Lineas de instrucciones
+    getline(continentess, line); // Lineas de instrucciones
 
-    while (getline(continentes, line)) {
+    while (getline(continentess, line)) {
         Continente cont;
         string token;
         int i = 1;
@@ -99,13 +100,15 @@ int Risk::inicializarDatos() {
 
     Risk::setContinentes(nuevosContinentes);
 
-    continentes.close();
+    continentess.close();
 
     ifstream territorios("../Data/Territorios.csv");
 
     if (!territorios) return -1;
 
     getline(territorios, line);
+
+    int n = 0;
 
     while (getline(territorios, line)) {
         Territorio nuevo;
@@ -120,74 +123,19 @@ int Risk::inicializarDatos() {
             i++;
         }
 
-        for (Continente continente: Risk::continentes) {
+        for (Continente &continente: Risk::continentes) {
             if (continente.getId() == nuevo.getIdContinente()) {
                 continente.agregarTerritorio(nuevo);
                 break;
             }
         }
+
+        grafo.InsVertice(nuevo);
+        n++;
     }
-
-    territorios.close();
-
-    return 1;
-}
-
-list<Jugador> Risk::inicializarJugadores(string file) {
-    list<Jugador> result;
-    ifstream input(file);
-
-    if (!input) return result;
-
-    string line;
-
-    input >> line;
-
-    int numJugadores = stoi(line);
-
-    for (int i = 0; i < numJugadores; i++) {
-        Jugador jug;
-
-        jug.setId(to_string(i+1));
-        getline(input, line, ';');
-        jug.setNombre(line);
-        getline(input, line, ';');
-        jug.setColor(line);
-        getline(input, line, ';');
-        int numTerritorios = stoi(line);
-
-        list<Territorio> jugTerr;
-        for (int j = 0; j < numTerritorios; j++) {
-            string id, tropas;
-            getline(input, line, ';');
-            id = line;
-            getline(input, line, ';');
-            tropas = stoi(line);
-
-            for (Continente cont: Risk::continentes) { //encuentra el territorio en el continente
-                Territorio terr = cont.encontrarTerritorio(id);
-                if (terr.getNombre() == "-1") continue;
-                jugTerr.push_back(terr);
-                break;
-            }
-        }
-
-        getline(input, line, ';');
-        int numCartas = stoi(line); // Sin usar?
-
-        jug.setTerritorios(jugTerr);
-        result.push_back(jug);
-
-        for(auto t : jug.getTerritorios()){
-            t.getTropas();
-        }
-    }
-
-    Grafo<int> grafo;
-
     //crear grafo
     //america del sur : 2
-    grafo.InsVertice(1); //0
+    /*grafo.InsVertice(1); //0
     grafo.InsVertice(2); //1
     grafo.InsVertice(3); //2
     grafo.InsVertice(4); //3
@@ -233,11 +181,9 @@ list<Jugador> Risk::inicializarJugadores(string file) {
     grafo.InsVertice(8); //38
     grafo.InsVertice(9); //39
     grafo.InsVertice(6); //40
-    grafo.InsVertice(5); //41
-
-
+    grafo.InsVertice(5); //41*/
     //america del sur
-    grafo.InsArco(0, 2, 1); grafo.InsArco(2, 0, 1);
+    /*grafo.InsArco(0, 2, 1); grafo.InsArco(2, 0, 1);
     grafo.InsArco(0, 1, 1); grafo.InsArco(1, 0, 1);
     grafo.InsArco(1, 3, 1); grafo.InsArco(3, 1, 1);
     grafo.InsArco(2, 3, 1); grafo.InsArco(3, 2, 1);
@@ -317,9 +263,60 @@ list<Jugador> Risk::inicializarJugadores(string file) {
     grafo.InsArco(37, 40, 1); grafo.InsArco(40, 37, 1);
     grafo.InsArco(38, 40, 1); grafo.InsArco(40, 38, 1);
     grafo.InsArco(38, 41, 1); grafo.InsArco(41, 38, 1);
-    grafo.InsArco(40, 41, 1); grafo.InsArco(41, 40, 1);
+    grafo.InsArco(40, 41, 1); grafo.InsArco(41, 40, 1);*/
 
+    cout << "Grafoooo\n";
+    territorios.close();
 
+    return 1;
+}
+
+list<Jugador> Risk::inicializarJugadores(string file) {
+    list<Jugador> result;
+    ifstream input(file);
+
+    if (!input) return result;
+
+    string line;
+
+    input >> line;
+
+    int numJugadores = stoi(line);
+
+    for (int i = 0; i < numJugadores; i++) {
+        Jugador jug;
+
+        jug.setId(to_string(i+1));
+        getline(input, line, ';');
+        jug.setNombre(line);
+        getline(input, line, ';');
+        jug.setColor(line);
+        getline(input, line, ';');
+        int numTerritorios = stoi(line);
+
+        list<Territorio> jugTerr;
+        for (int j = 0; j < numTerritorios; j++) {
+            string id;
+            getline(input, line, ';');
+            id = line;
+            getline(input, line, ';');
+            int tropas = stoi(line);
+
+            for (Continente &cont: Risk::continentes) { //encuentra el territorio en el continente
+                Territorio &terr = cont.encontrarTerritorio(id);
+                if (terr.getNombre() == "-1") continue;
+                terr.setTropas(tropas);
+                jugTerr.push_back(terr);
+                break;
+            }
+        }
+
+        getline(input, line);
+        int numCartas = stoi(line); // Sin usar?
+
+        jug.setTerritorios(jugTerr);
+        result.push_back(jug);
+    }
 
     return result;
 }

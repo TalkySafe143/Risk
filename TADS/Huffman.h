@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "ArbBin.h"
+#include "Risk.h"
 #include <map>
 
 using namespace std;
