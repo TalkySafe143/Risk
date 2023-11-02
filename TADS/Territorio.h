@@ -26,6 +26,7 @@ public:
 
     void setTropas(int tropas);
 
+    bool ocupado;
 private:
     string idTerritorio;
     string nombre;

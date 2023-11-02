@@ -180,6 +180,28 @@ list<Jugador> inicializarJugadores(string file) {
 
     return result;
 }
+void simularJugadas(string file) {
+    ifstream archivo(file);
+
+    if (!archivo.is_open()) {
+        cout << "No se pudo abrir el archivo " << file << endl;
+        return;
+    }
+
+    string linea;
+    while (getline(archivo, linea)) {
+        if (linea.empty()) continue;
+
+        stringstream ss(linea);
+        string jugada;
+
+        while (getline(ss, jugada, ';')) {
+            simularJugada(jugada);
+        }
+    }
+
+    archivo.close();
+}
 
 void iniciarJuego(list<Jugador> jugadores) {
     Risk::jugadores = jugadores;
@@ -239,7 +261,109 @@ int Risk::reasignarTropas() {
 
     return tropasPorTerritorios + tropasPorContinentes;
 }
+bool esCombinacionValida(std::list<Carta>& cartas) {
+    // Supongamos que 'tipo' es un miembro de 'Carta' que indica si es de infantería, caballería, artillería o comodín.
+    int infanteria = 0, caballeria = 0, artilleria = 0, comodines = 0;
+    for (const Carta& carta : cartas) {
+        if (carta.getId() == "infanteria") ++infanteria;
+        else if (carta.getId() == "caballeria") ++caballeria;
+        else if (carta.getId() == "artilleria") ++artilleria;
+        else if (carta.getId() == "comodin") ++comodines;
+    }
 
+    // Verifica las combinaciones válidas
+    if (comodines == 1) {
+        // Si hay un comodín, solo necesitamos dos cartas del mismo tipo o todas diferentes.
+        return (infanteria >= 2 || caballeria >= 2 || artilleria >= 2 ||
+                (infanteria > 0 && caballeria > 0 && artilleria > 0));
+    } else if (comodines == 0) {
+        // Sin comodines, necesitamos tres cartas del mismo tipo o todas diferentes.
+        return (infanteria == 3 || caballeria == 3 || artilleria == 3 ||
+                (infanteria == 1 && caballeria == 1 && artilleria == 1));
+    }
+
+    return false;
+}
+void retirarCartasUtilizadas(std::list<Carta>& cartas, const std::list<Territorio>& territorios) {
+    // Suponemos que 'cartas' contiene al menos 3 cartas que forman una combinación válida.
+
+    // Contadores para las cartas de cada tipo.
+    int infanteria = 0, caballeria = 0, artilleria = 0, comodines = 0;
+
+    // Contar las cartas de cada tipo.
+    for (const auto& carta : cartas) {
+        if (carta.tipo == "Infanteria") infanteria++;
+        else if (carta.tipo == "Caballeria") caballeria++;
+        else if (carta.tipo == "Artilleria") artilleria++;
+        else if (carta.tipo == "Comodin") comodines++;
+    }
+
+    // Determinar qué cartas retirar.
+    std::list<Carta>::iterator it = cartas.begin();
+    while (it != cartas.end()) {
+        bool cartaEliminada = false;
+        if (comodines > 0 && it->tipo == "Comodin") {
+            // Eliminar un comodín.
+            it = cartas.erase(it);
+            comodines--;
+            cartaEliminada = true;
+        } else if (infanteria > 0 && it->tipo == "Infanteria") {
+            // Eliminar una carta de infantería.
+            it = cartas.erase(it);
+            infanteria--;
+            cartaEliminada = true;
+        } else if (caballeria > 0 && it->tipo == "Caballeria") {
+            // Eliminar una carta de caballería.
+            it = cartas.erase(it);
+            caballeria--;
+            cartaEliminada = true;
+        } else if (artilleria > 0 && it->tipo == "Artilleria") {
+            // Eliminar una carta de artillería.
+            it = cartas.erase(it);
+            artilleria--;
+            cartaEliminada = true;
+        }
+
+        // Si no se eliminó ninguna carta, avanzamos al siguiente elemento.
+        if (!cartaEliminada) {
+            ++it;
+        }
+
+        // Si hemos eliminado tres cartas, salimos del bucle.
+        if ((3 - comodines - infanteria - caballeria - artilleria) >= 3) {
+            break;
+        }
+    }
+}
+int intercambiarCartas(std::list<Carta>& cartas, const std::list<Territorio>& territorios, int& gruposIntercambiados) {
+    int unidades = 0;
+
+    if (cartas.size() >= 3 && esCombinacionValida(cartas)) {
+        // Calcula las unidades adicionales basadas en la cantidad de intercambios realizados previamente
+        if (gruposIntercambiados < 5) {
+            unidades += 4 + gruposIntercambiados * 2;
+        } else {
+            unidades += 15 + (gruposIntercambiados - 5) * 5;
+        }
+
+        // Calcula las unidades extra por cartas que coinciden con territorios ocupados
+        for (auto& carta : cartas) {
+            if (std::any_of(territorios.begin(), territorios.end(), [&carta](const Territorio& territorio) {
+                return carta.getIdTerritorio() == territorio.getNombre() && territorio.ocupado;
+            })) {
+                unidades += 2; // Asume que solo se cuentan una vez las unidades extras por cartas/territorios
+            }
+        }
+
+        // Retira las cartas utilizadas para el intercambio
+        retirarCartasUtilizadas(cartas, territorios);
+
+        // Incrementa el contador de grupos intercambiados
+        gruposIntercambiados++;
+    }
+
+    return unidades;
+}
 int fortificarTerritorio(Territorio from, Territorio to, int tropas) {
     list<Territorio>::iterator fromIt = Risk::turno->getTerritorios().begin();
     list<Territorio>::iterator toIt = Risk::turno->getTerritorios().begin();

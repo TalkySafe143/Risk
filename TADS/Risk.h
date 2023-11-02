@@ -98,6 +98,10 @@ public:
      */
     Jugador avanzarTurno();
 
+    bool esCombinacionValida(std::list<Carta>& cartas);
+
+    void retirarCartasUtilizadas(std::list<Carta>& cartas, const std::list<Territorio>& territorios);
+
     const list<Jugador> &getJugadores() const;
 
     void setJugadores(const list<Jugador> &jugadores);

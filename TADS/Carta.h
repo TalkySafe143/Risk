@@ -29,6 +29,7 @@ public:
 
     void setValue(int value);
 
+    const char *tipo;
 };
 
 
