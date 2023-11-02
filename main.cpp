@@ -97,6 +97,23 @@ int main() {
                 break;
             }
 
+            case guardar_comprimido : {
+
+                auto itCommand = command.begin();
+                itCommand++;
+
+                string fileCompress = saveGame.encode(*itCommand);
+
+                if (fileCompress == "\0") {
+                    cout << "Algo ha salido mal con el archivo comprimido\n";
+                    break;
+                }
+
+                cout << "Se ha guardado el archivo con el nombre: " << fileCompress << endl;
+
+                break;
+            }
+
             default:
                 break;
         }

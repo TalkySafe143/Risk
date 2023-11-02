@@ -35,7 +35,7 @@ int Huffman::guardarPartida(Risk game, string file) {
     archivo << jugadores.size() << std::endl;
 
     for (auto& jugador : jugadores) {
-        archivo << jugador.getId() << ";" << jugador.getNombre() << ";" << jugador.getColor() << ";";
+        archivo << jugador.getNombre() << ";" << jugador.getColor() << ";";
 
         const std::list<Territorio> territorios = jugador.getTerritorios();
         archivo << territorios.size() << ";";
