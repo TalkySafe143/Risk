@@ -30,8 +30,8 @@ public:
     ArbBin operator=(const ArbBin<T>& other); //sobrecarga del igual
     bool IsEmpty() const ;  //Retorna true si el arbol esta vacio filas en caso contario
     T GetInfo() const ;     //Retorna la informacion que se encuentra en la raiz
-    ArbBin<T> GetIzqArbBin(); // retorna Copia de subarbol Izquierdo
-    ArbBin<T> GetDerArbBin(); // retorna copia de subarbol derecho
+    ArbBin<T> *GetIzqArbBin(); // retorna Copia de subarbol Izquierdo
+    ArbBin<T> *GetDerArbBin(); // retorna copia de subarbol derecho
 
     /* me devuelve el mismo arbol --son metodos sobrecargados-- */
     void GetIzqArbBin(ArbBin<T> &); // subarbol Izquierdo retorna la direccion de lo que tiene el arbool

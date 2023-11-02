@@ -53,9 +53,9 @@ T ArbBin<T>::GetInfo() const {
 
 // Retorna una copia del subárbol izquierdo
 template <class T>
-ArbBin<T> ArbBin<T>::GetIzqArbBin() {
+ArbBin<T> *ArbBin<T>::GetIzqArbBin() {
     if (raiz != nullptr) {
-        return ArbBin<T>(raiz->GetIzq());
+        return new ArbBin<T>(raiz->GetIzq());
     } else {
         throw std::runtime_error("El arbol esta vacio");
     }
@@ -63,9 +63,9 @@ ArbBin<T> ArbBin<T>::GetIzqArbBin() {
 
 // Retorna una copia del subárbol derecho
 template <class T>
-ArbBin<T> ArbBin<T>::GetDerArbBin() {
+ArbBin<T> *ArbBin<T>::GetDerArbBin() {
     if (raiz != nullptr) {
-        return ArbBin<T>(raiz->GetDer());
+        return new ArbBin<T>(raiz->GetDer());
     } else {
         throw std::runtime_error("El arbol esta vacio");
     }

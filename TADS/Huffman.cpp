@@ -90,46 +90,39 @@ void Huffman::construirArbol(map<char, int> freq) {
     if (!pq.empty()) {
         ArbBin<FreqChar>* topNode = *(pq.begin());
 
-        ArbBin<FreqChar> left = topNode->GetIzqArbBin();
-        ArbBin<FreqChar> der = topNode->GetDerArbBin();
+        ArbBin<FreqChar>* left = topNode->GetIzqArbBin();
+        ArbBin<FreqChar>* der = topNode->GetDerArbBin();
         tree = new ArbBin<FreqChar>(topNode->GetInfo());
         bool ok;
-        tree->CuelgaSubarbolIzq(left, ok);
-        tree->CuelgaSubarbolDer(der, ok);
+        tree->CuelgaSubarbolIzq(*left, ok);
+        tree->CuelgaSubarbolDer(*der, ok);
     }
 }
 
 
 
-string Huffman::obtenerCodigoHuffman(char c, ArbBin<FreqChar>* tree) {
+string Huffman::obtenerCodigoHuffman(char c, ArbBin<FreqChar>* tree, string curr) {
     if (tree->IsEmpty()) {
-        return "";
+        return curr+'2';
     }
 
-    ArbBin<FreqChar> subarbolIzquierdo = tree->GetIzqArbBin();
-    if (!subarbolIzquierdo.IsEmpty() && subarbolIzquierdo.GetInfo().c == c) {
-        return "0";
-    } else if (!subarbolIzquierdo.IsEmpty()) {
-        string leftCode = obtenerCodigoHuffman(c, &subarbolIzquierdo);
-        if (!leftCode.empty()) {
-            return "0" + leftCode;
-        }
+    if (tree->GetInfo().c == c) {
+        return curr;
     }
 
-    auto subarbolDerecho = tree->GetDerArbBin();
-    if (!subarbolDerecho.IsEmpty() && subarbolDerecho.GetInfo().c == c) {
-        return "1";
-    } else if (!subarbolDerecho.IsEmpty()) {
-        string rightCode = obtenerCodigoHuffman(c, &subarbolDerecho);
-        if (!rightCode.empty()) {
-            return "1" + rightCode;
-        }
+    string l = obtenerCodigoHuffman(c, tree->GetIzqArbBin(), curr + '0');
+    string d = obtenerCodigoHuffman(c, tree->GetDerArbBin(), curr + '1');
+
+    if (l[l.size()-1] != '2') {
+        return l;
     }
 
-    return "";
+    if (d[d.size()-1] != '2') {
+        return d;
+    }
+
+    return curr + '2';
 }
-
-
 
 
 /**
@@ -248,7 +241,7 @@ string Huffman::encode(string file) {
     string encodedText;
     for (char c : textContent) {
 
-        string huffmanCode = obtenerCodigoHuffman(c, tree);
+        string huffmanCode = obtenerCodigoHuffman(c, tree, "");
         encodedText += huffmanCode;
     }
 

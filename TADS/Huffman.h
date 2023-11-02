@@ -45,7 +45,7 @@ public:
      * @param tree arbol huffman
      * @return codigo huffman
      */
-    string obtenerCodigoHuffman(char c, ArbBin<FreqChar>* tree);
+    string obtenerCodigoHuffman(char c, ArbBin<FreqChar>* tree, string curr);
 
     /**
      * Esta funcion tiene como proposito decodificar un archivo binario y escribir un archivo de texto
