@@ -51,5 +51,6 @@ pair<NodoG<T>, int> NodoG<T>::getAdjacentVertex(NodoG<T> s) {
         if (node.first.getData() == s.getData()) return node;
     }
 
-    return pair<NodoG<T>, int>();
+    NodoG<T> a;
+    return pair<NodoG<T>, int>(a, -1);
 }

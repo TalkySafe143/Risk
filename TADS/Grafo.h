@@ -32,8 +32,6 @@ public:
     list<int> sucesores(int v1) ;// retorna la lista enteros con los sucesores del vértice v1
     list< T >  getvertices() ; // Retorna una lista con los vértices del grafo. Cada elemento de la lista tiene la información (tipo T) de cada vértice
 
-    // Clase estructuras
-
     list<Grafo<T>> componentesConexos(Grafo<T> graph);
 
 };
