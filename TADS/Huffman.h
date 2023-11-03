@@ -64,6 +64,8 @@ public:
      * LA CLASE QUE LLAME A ESTE METODO TIENE LA RESPONSABILIDAD DE BORRAR EL ARCHIVO DE TEXTO
      */
     string encode(string file);
+
+    char extractChar(string &buffer, ArbBin<FreqChar>* tree);
 };
 
 

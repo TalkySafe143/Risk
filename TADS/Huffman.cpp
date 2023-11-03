@@ -141,28 +141,27 @@ string Huffman::decode(string file) {
     }
 
     // Leer n (cantidad de caracteres diferentes)
-    uint16_t numDistinctChars;
-    inputFile.read(reinterpret_cast<char*>(&numDistinctChars), sizeof(uint16_t));
+    short numDistinctChars;
+    inputFile.read(reinterpret_cast<char*>(&numDistinctChars), sizeof(short));
 
     // Leer ci y fi para cada carácter y construir el mapa de frecuencias
     map<char, int> freq;
-    for (uint16_t i = 0; i < numDistinctChars; ++i) {
+    for (short i = 0; i < numDistinctChars; ++i) {
         char c;
         int charFreq;
         inputFile.read(&c, sizeof(char));
-        inputFile.read(reinterpret_cast<char*>(&charFreq), sizeof(int));
+        inputFile.read(reinterpret_cast<char*>(&charFreq), sizeof(long long));
         freq[c] = charFreq;
     }
 
     // Leer w (longitud original del archivo)
     int originalLength;
-    inputFile.read(reinterpret_cast<char*>(&originalLength), sizeof(int));
+    inputFile.read(reinterpret_cast<char*>(&originalLength), sizeof(long long));
 
     // Construir el árbol de Huffman basado en las frecuencias
     construirArbol(freq);
 
     // Decodificar el contenido del archivo binario
-    string decodedText;
     string bitBuffer;
     char byte;
     while (inputFile.read(&byte, sizeof(char))) {
@@ -173,27 +172,18 @@ string Huffman::decode(string file) {
         // Agregar los bits al búfer de bits
         bitBuffer += bitString;
 
-        // Decodificar los caracteres a partir del búfer de bits
-        while (bitBuffer.size() >= 8) {
-            // Tomar los primeros 8 bits del búfer
-            string byteBits = bitBuffer.substr(0, 8);
-            
-            // Convertir los bits a un byte
-            bitset<8> charBits(byteBits);
-            char decodedChar = static_cast<char>(charBits.to_ulong());
-
-            // Agregar el carácter decodificado al texto
-            decodedText += decodedChar;
-
-            // Eliminar los primeros 8 bits del búfer
-            bitBuffer.erase(0, 8);
-        }
     }
 
     inputFile.close();
 
+    string decodedString = "";
+    reverse(bitBuffer.begin(), bitBuffer.end());
+    while (decodedString.size() < originalLength) {
+        decodedString += extractChar(bitBuffer, this->tree);
+    }
+
     // Verificar la longitud del texto decodificado
-    if (decodedText.size() != static_cast<size_t>(originalLength)) {
+    if (decodedString.size() != static_cast<size_t>(originalLength)) {
         cerr << "Error: Longitud del texto decodificado no coincide con la longitud original." << endl;
         return "\0"; // Devolver una cadena nula para indicar un error
     }
@@ -205,11 +195,12 @@ string Huffman::decode(string file) {
         return "\0"; // Devolver una cadena nula para indicar un error
     }
 
-    outputFile << decodedText;
+    outputFile << decodedString;
     outputFile.close();
 
     // Devolver el nombre del archivo de texto creado
     return "decoded.txt";
+
 }
 
 
@@ -253,18 +244,18 @@ string Huffman::encode(string file) {
         return "\0";
     }
 
-    outputFile.write(reinterpret_cast<char*>(&numDistinctChars), sizeof(uint16_t));
+    outputFile.write(reinterpret_cast<char*>(&numDistinctChars), sizeof(short));
 
     for (const auto& pair : freq) {
         char c = pair.first;
         int freq = pair.second;
         outputFile.write(&c, sizeof(char));
-        outputFile.write(reinterpret_cast<char*>(&freq), sizeof(int));
+        outputFile.write(reinterpret_cast<char*>(&freq), sizeof(long long));
     }
 
     int originalLength = textContent.size();
  
-    outputFile.write(reinterpret_cast<char*>(&originalLength), sizeof(int));
+    outputFile.write(reinterpret_cast<char*>(&originalLength), sizeof(long long));
 
     for (size_t i = 0; i < encodedText.size(); i += 8) {
         string byte = encodedText.substr(i, 8);
@@ -279,4 +270,20 @@ string Huffman::encode(string file) {
     outputFile.close();
 
     return "encoded.bin";
+}
+
+char Huffman::extractChar(string &buffer, ArbBin<FreqChar>* tree) {
+    if (tree->IsEmpty()) return '\0';
+
+    if (tree->GetDerArbBin()->IsEmpty() && tree->GetIzqArbBin()->IsEmpty()) {
+        return tree->GetInfo().c;
+    }
+
+    char search = buffer[buffer.size()-1];
+    buffer.pop_back();
+    if (search == '1') {
+       return extractChar(buffer, tree->GetDerArbBin());
+    } else {
+        return extractChar(buffer, tree->GetIzqArbBin());
+    }
 }
