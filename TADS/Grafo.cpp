@@ -144,7 +144,7 @@ list<int> Grafo<T>::sucesores(int v1) {
 }
 
 template< class T >
-list< T > Grafo<T>::getvertices() {
+list< T > &Grafo<T>::getvertices() {
     list<T> vertex;
     for (auto node: Grafo<T>::vertices) {
         vertex.push_back(node.getData());

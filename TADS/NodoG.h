@@ -29,4 +29,7 @@ public:
     void changeArcCost(NodoG<T> &a, int c);
 };
 
+
+
+
 #endif //PROYECTO_NODOG_H

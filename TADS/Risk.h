@@ -92,7 +92,7 @@ public:
      *      - 1: Todo salio bien
      *      - -1: Algo salió mal
      */
-    int fortificarTerritorio(Territorio from, Territorio to, int tropas);
+    int fortificarTerritorio(Territorio &from, Territorio &to, int tropas);
 
     /**
      * El proposito de esta funcion es mover el iterador del turno y reacomodarlo segun la lista
@@ -108,21 +108,23 @@ public:
 
     void simularJugada(string jugada);
 
-    const list<Jugador> &getJugadores() const;
+     list<Jugador> &getJugadores() ;
 
     void setJugadores(const list<Jugador> &jugadores);
 
     list<Continente> &getContinentes();
 
-    static void setContinentes(const list<Continente> &continentes);
+    void setContinentes( list<Continente> &continentes);
 
     list<Carta> &getCartas();
 
-    static void setCartas(const list<Carta> &cartas);
+    void setCartas( list<Carta> &cartas);
 
     list<Jugador>::iterator &getTurno();
 
     void setTurno(const list<Jugador>::iterator &turno);
+
+    Grafo<Territorio> &getGrafo();
 
     int intercambiarCartas(list<Carta> &cartas, const list<Territorio> &territorios, int &gruposIntercambiados);
 };

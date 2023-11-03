@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 
 add_executable(Proyecto main.cpp
-        TADS/ArbBin.cpp
         TADS/Carta.cpp
         TADS/Continente.cpp
         TADS/Grafo.cpp
@@ -17,7 +16,6 @@ add_executable(Proyecto main.cpp
         TADS/Risk.cpp
         TADS/Territorio.cpp
         TADS/Utils.cpp
-        TADS/ArbBin.h
         TADS/Carta.h
         TADS/Continente.h
         TADS/Grafo.h
@@ -29,5 +27,7 @@ add_executable(Proyecto main.cpp
         TADS/Risk.h
         TADS/Territorio.h
         TADS/Utils.h
+
 )
+
 

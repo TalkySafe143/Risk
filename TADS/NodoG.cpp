@@ -46,13 +46,13 @@ bool NodoG<T>::getVisited() {
 }
 
 template<class T>
-pair<reference_wrapper<NodoG<T>>, int> NodoG<T>::getAdjacentVertex(NodoG<T> s) {
+pair<reference_wrapper<NodoG<T>>, int>  NodoG<T>::getAdjacentVertex(NodoG<T> s) {
     for (auto &node: NodoG<T>::adj) {
         if (node.first.get().getData() == s.getData()) return node;
     }
 
     NodoG<T> a;
-    return pair<reference_wrapper<NodoG<T>>, int>(&a, -1);
+    return pair<reference_wrapper<NodoG<T>>, int>(a, -1);
 }
 
 template<class T>

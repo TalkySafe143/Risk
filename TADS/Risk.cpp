@@ -5,7 +5,7 @@
 #include "Risk.h"
 #include "Grafo.cpp"
 
- list<Jugador> &Risk::getJugadores()  {
+list<Jugador> &Risk::getJugadores()  {
     return jugadores;
 }
 
@@ -17,7 +17,7 @@ void Risk::setJugadores(const list<Jugador> &jugadores) {
     return continentes;
 }
 
-void Risk::setContinentes(const list<Continente> &continentes) {
+void Risk::setContinentes(list<Continente> &continentes) {
     Risk::continentes = continentes;
 }
 
@@ -25,7 +25,7 @@ list<Carta> &Risk::getCartas() {
     return cartas;
 }
 
-void Risk::setCartas(const list<Carta> &cartas) {
+void Risk::setCartas( list<Carta> &cartas) {
     Risk::cartas = cartas;
 }
 
@@ -594,7 +594,7 @@ int Risk::intercambiarCartas(std::list<Carta>& cartas, const std::list<Territori
 
     return unidades;
 }
-int Risk::fortificarTerritorio(Territorio from, Territorio to, int tropas) {
+int Risk::fortificarTerritorio(Territorio &from, Territorio &to, int tropas) {
     list<Territorio>::iterator fromIt = Risk::turno->getTerritorios().begin();
     list<Territorio>::iterator toIt = Risk::turno->getTerritorios().begin();
     bool fromFounded = false, toFounded = false;
@@ -629,4 +629,32 @@ Jugador Risk::avanzarTurno(int move) {
     advance(Risk::turno, move);
     if (Risk::turno == Risk::jugadores.end()) Risk::turno = Risk::jugadores.begin();
     return *(Risk::turno);
+}
+Grafo<Territorio> &Risk::getGrafo() {
+    return Risk::grafo;
+}
+
+list<int> Risk::tirarDados(int numDados) {
+    // Verifica que el número de dados sea válido (1-3 para ataque, 1-2 para defensa)
+    if (numDados < 1 || numDados > 3) {
+        cout << "Numero de dados no valido." << endl;
+        return list<int>(); // Retorna una lista vacía si el número de dados no es válido
+    }
+
+    // Crear un generador de números aleatorios
+    random_device rd;
+    mt19937 gen(rd()); // Mersenne Twister 19937 generator, gen(rd()) se usa para sembrar el generador
+    uniform_int_distribution<> distrib(1, 6); // define el rango
+
+    list<int> resultados;
+
+    for (int i = 0; i < numDados; ++i) {
+        resultados.push_back(distrib(gen)); // genera un número aleatorio y lo agrega a la lista
+    }
+
+
+    resultados.sort();
+    resultados.reverse(); // esto pondrá los números más grandes primero
+
+    return resultados;
 }
