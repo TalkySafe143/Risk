@@ -28,11 +28,13 @@ public:
      * @param tropas El numero de tropas a ubicar
      * @param jugador Jugador el cual quiere ubicar las tropas
      */
-    void asignarTropasTerritorio(int tropas, Jugador &jugador);
+    int asignarTropasTerritorio(int tropas, Jugador &jugador);
 
     Risk &getGame();
 
     void setGame(const Risk &game);
+
+    int efectuarTurno();
 };
 
 

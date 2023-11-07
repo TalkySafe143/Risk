@@ -86,6 +86,11 @@ int main() {
                 break;
             }
             case turno: {                      //turno <id_jugador>
+
+                if (juegoFinalizado) {
+                    cout << "Esta partida ya tuvo un ganador.\n";
+                    break;
+                }
                 auto itTurno = command.begin();
                 itTurno++;
                 if (!primerTurno) {
@@ -101,171 +106,10 @@ int main() {
 
                 primerTurno = false;
 
-                cout << "---- Reasignar las tropas -----\n";
-
-                int numeroTropasReclamadas = 0;
-
-                numeroTropasReclamadas += juego.getGame().reasignarTropas();
-
-                auto continentesJugador = juego.getGame().getTurno()->verificarContinentes(juego.getGame().getContinentes());
-
-                for (auto cont: continentesJugador) {
-                    if (cont.getId() == "1") numeroTropasReclamadas += 5;
-                    if (cont.getId() == "2") numeroTropasReclamadas += 2;
-                    if (cont.getId() == "3") numeroTropasReclamadas += 5;
-                    if (cont.getId() == "4") numeroTropasReclamadas += 3;
-                    if (cont.getId() == "5") numeroTropasReclamadas += 7;
-                    if (cont.getId() == "6") numeroTropasReclamadas += 2;
-                }
-
-                //numeroTropasReclamadas += juego.getGame().intercambiarCartas();
-
-                juego.asignarTropasTerritorio(numeroTropasReclamadas, *(juego.getGame().getTurno()));
-
-                cout << "---- Atacar un territorio vecino ----\n";
-                cout << "Seleccione un territorio desde el cual atacar\n";
-                set<string> validIds;
-                for (auto terr: juego.getGame().getTurno()->getTerritorios()) {
-                    cout << terr.getIdTerritorio() << " -> " << terr.getNombre() << endl;
-                    validIds.insert(terr.getIdTerritorio());
-                }
-
-                string optionTerr = "";
-
-                while (!validIds.count(optionTerr)) {
-                    cin >> optionTerr;
-
-                    if (!validIds.count(optionTerr)) {
-                        cout << "No posee ese territorio\n";
-                    }
-                }
-
-                auto &territoriosGrafo = juego.getGame().getGrafo().getvertices();
-                int choose = -1;
-                int i = 0;
-                for (auto tGrafo: territoriosGrafo) {
-                    if (tGrafo.getIdTerritorio() == optionTerr) {
-                        choose = i;
-                        break;
-                    }
-                    i++;
-                }
-
-                auto vecinosSelected = juego.getGame().getGrafo().sucesores(choose);
-
-                cout << "Seleccione el vecino el cual quiere atacar: ";
-                set<int> validVertex;
-                for (auto v: vecinosSelected) {
-                    auto itTerr = territoriosGrafo.begin();
-                    advance(itTerr, v);
-                    validVertex.insert(v);
-                    cout << v << " -> " << itTerr->getNombre() << " con un costo " << juego.getGame().getGrafo().CostoArco(choose, v) << endl;
-                }
-                int chooseVertex = -1;
-
-                while (!validVertex.count(chooseVertex)) {
-                    cin >> chooseVertex;
-
-                    if (!validVertex.count(chooseVertex)) {
-                        cout << "Ups, ese vecino no existe\n";
-                    }
-                }
-
-                // Atacante lanza 3 dados de color rojo
-                // Defiende 2 de blanco
-                // Si el atacante > defensor  -> defensor pierde una tropa
-                // Si el atacante < defensor  -> atacante pierde una tropa
-                // Si atacante == defensor -> atacante pierde una tropa
-                int numTropasAtacante = 1000000, numTropasDefensor = 1000000;
-
-                while (numTropasAtacante > 0 && numTropasDefensor > 0) {
-                    auto dadosAtacante = juego.getGame().tirarDados(3);
-                    auto dadosDefensor = juego.getGame().tirarDados(2);
-
-                    dadosAtacante.sort();
-
-                    int sumAtacante = 0, sumDefensor=0;
-                    auto resultAtacante = dadosAtacante.end();
-                    resultAtacante--;
-                    sumAtacante += *resultAtacante;
-                    resultAtacante--;
-                    sumAtacante += *resultAtacante;
-
-
-                    resultAtacante = dadosDefensor.begin();
-                    sumDefensor += *resultAtacante;
-                    resultAtacante++;
-                    sumDefensor += *resultAtacante;
-
-                    auto itTerritorioGrafo = territoriosGrafo.begin();
-
-                    if (sumAtacante > sumDefensor) {
-                        advance(itTerritorioGrafo, chooseVertex);
-                        itTerritorioGrafo->setTropas(itTerritorioGrafo->getTropas()-1);
-                    } else if (sumAtacante < sumDefensor) {
-                        advance(itTerritorioGrafo, choose);
-                        itTerritorioGrafo->setTropas(itTerritorioGrafo->getTropas()-1);
-                    } else {
-                        advance(itTerritorioGrafo, choose);
-                        itTerritorioGrafo->setTropas(itTerritorioGrafo->getTropas()-1);
-                    }
-
-                    itTerritorioGrafo = territoriosGrafo.begin();
-                    advance(itTerritorioGrafo, choose);
-                    numTropasAtacante = itTerritorioGrafo->getTropas();
-
-                    itTerritorioGrafo = territoriosGrafo.begin();
-                    advance(itTerritorioGrafo, chooseVertex);
-                    numTropasDefensor = itTerritorioGrafo->getTropas();
-                }
-
-                int fortificar = 0;
-                cout << "Fortificar territorio?: "; cin >> fortificar;
-
-                if (fortificar) {
-                    cout << "Seleccione cuales territorios quiere fortificar y la cantidad de tropas: \n";
-                    cout << "El formato es: [from to tropas]: ";
-
-                    for (auto terr : juego.getGame().getTurno()->getTerritorios()) {
-                        cout << terr.getIdTerritorio() << " -> " << terr.getNombre() << " con tropas " << terr.getTropas() << endl;
-                    }
-                    string from, to;
-                    int tropas;
-                    cin >> from >> to >> tropas;
-
-                    int j = 0;
-                    Territorio fromT, toT;
-                    for (auto &terr : juego.getGame().getTurno()->getTerritorios()) {
-                        if (terr.getIdTerritorio() == from) {
-                            fromT = terr;
-                        }
-                    }
-                    list<Territorio>::iterator fromI, toI;
-                    bool readyFrom = false, readyTo = false;
-                    for (
-                            auto itG = juego.getGame().getTurno()->getTerritorios().begin();
-                            itG != juego.getGame().getTurno()->getTerritorios().end();
-                            itG++
-                            ) {
-                        if (itG->getIdTerritorio() == from) {
-                            fromI = itG;
-                            auto nuevo = juego.getGame().getTurno()->getTerritorios().begin();
-                            itG = nuevo;
-                            readyFrom = true;
-                        }
-
-                        if (itG->getIdTerritorio() == to) {
-                            toI = itG;
-                            auto nuevo = juego.getGame().getTurno()->getTerritorios().begin();
-                            itG = nuevo;
-                            readyTo = true;
-                        }
-
-                        if (readyFrom && readyTo) break;
-                    }
-                    juego.getGame().fortificarTerritorio(*fromI, *toI, tropas);
-
-
+                int numberCont = juego.efectuarTurno();
+                if (numberCont == 6) {
+                    cout << "Ganaste el juego " << juego.getGame().getTurno()->getNombre() << ". Felicidades.\n";
+                    juegoFinalizado = true;
                 }
 
                 break;
@@ -275,9 +119,8 @@ int main() {
 
                 auto file = command.begin();
                 file++;
-                cout << *file << endl;
                 if ( !saveGame.guardarPartida(juego.getGame(), *file) ) {
-                    cout << "Ocurrion algo con el guardado de la partida normal\n";
+                    cout << "Ocurrio algo con el guardado de la partida normal\n";
                 }
 
                 break;
@@ -305,7 +148,7 @@ int main() {
                 auto it = command.begin();
                 it++;
 
-                cout << "Se ha escrito el archivo en " << saveGame.decode(*it) << endl;
+                cout << "Se ha escrito el archivo en " << saveGame.decode(*it) << " por favor, ingrese el comando inicializar para indicar la incialización con dicho archivo"  << endl;
 
                 break;
             }

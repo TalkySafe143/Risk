@@ -406,26 +406,21 @@ int Risk::reasignarTropas() {
     Jugador& jugadorActual = *turno;
 
     // Calcular tropas basadas en territorios.
-    int numTerritorios = jugadorActual.getTerritorios().size();
-    int tropasPorTerritorios = max(3, numTerritorios / 3); // Un jugador recibe la mayor cantidad entre 3 o un tercio de sus territorios.
+    int numTerritorios = (int)jugadorActual.getTerritorios().size();
+    int tropasPorTerritorios = numTerritorios / 3; // Un jugador recibe la mayor cantidad entre 3 o un tercio de sus territorios.
 
     // Calcular tropas adicionales por continentes controlados.
     int tropasPorContinentes = 0;
-    for ( Continente& continente : continentes) {
-        bool controlaContinente = true;
-        for ( Territorio& territorio : continente.getTerritorios()) {
-            if (find_if(jugadorActual.getTerritorios().begin(), jugadorActual.getTerritorios().end(),
-                        [&territorio]( Territorio& t) { return t.getIdTerritorio() == territorio.getIdTerritorio(); }) == jugadorActual.getTerritorios().end()) {
-                controlaContinente = false;
-                break;
-            }
-        }
 
-        if (controlaContinente) {
-            // Aquí, debes conocer la cantidad de tropas adicionales que un continente proporciona.
-            // Esto debería ser un atributo de tus objetos Continente. Asumiendo que existe una función 'getTropasAdicionales'.
-            tropasPorContinentes += continente.getTerritorios().size();
-        }
+    auto poderContinentes = jugadorActual.verificarContinentes(Risk::continentes);
+
+    for (auto &cont: poderContinentes) {
+        if (cont.getNombre() =="America del Norte") tropasPorContinentes += 5;
+        if (cont.getNombre() =="America del Sur") tropasPorContinentes += 2;
+        if (cont.getNombre() =="Europa") tropasPorContinentes += 5;
+        if (cont.getNombre() =="Africa") tropasPorContinentes += 3;
+        if (cont.getNombre() =="Asia") tropasPorContinentes += 7;
+        if (cont.getNombre() =="Australia") tropasPorContinentes += 2;
     }
 
     return tropasPorTerritorios + tropasPorContinentes;
