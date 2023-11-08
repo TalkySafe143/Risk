@@ -17,7 +17,7 @@ class Grafo
 private:
     list< NodoG<T> > vertices;//la posición en la lista corresponde al número de vértice.
 public:
-    void InsVertice( T v ); //Agregar vértice v al final de la lista de vértices con Infovertice de tipo T.
+    void InsVertice( T &v ); //Agregar vértice v al final de la lista de vértices con Infovertice de tipo T.
     void InsArco(int v1, int v2,int c); // inserta un arco con costo c entre los vértices v1 y v2
     void ElimArco(int v1,int v2); //Elimina el arco entre los vértices v1 y v2
     void ElimVertice(int v);//Elimina el vértice v del Grafo

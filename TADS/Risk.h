@@ -40,7 +40,7 @@ public:
      * @param file El nombre del archivo de configuracion
      * @return Una lista de jugadores inicializados, en caso de que algo salga mal, retorna una lista vacia
     */
-    list<Jugador> inicializarJugadores(string file);
+    list<Jugador> *inicializarJugadores(string file);
 
     /**
      * Esta funcion tiene como proposito simular las jugadas desde un archivo
@@ -52,7 +52,7 @@ public:
      * Esta funcion tiene como proposito iniciar formalmente el juego con los jugadores
      * @param jugadores La lista de los jugadores del juego
      */
-    void iniciarJuego(list<Jugador> jugadores);
+    void iniciarJuego(list<Jugador> &jugadores);
 
     /**
      * Esta funcion tiene como proposito verificar cuantas tropas puede reclamar el turno actual

@@ -28,7 +28,7 @@ void Continente::setTerritorios(const list<Territorio> &territorios) {
     Continente::territorios = territorios;
 }
 
-void Continente::agregarTerritorio(Territorio nuevo) {
+void Continente::agregarTerritorio(Territorio &nuevo) {
     Continente::territorios.push_back(nuevo);
 }
 

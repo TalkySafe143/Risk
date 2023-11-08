@@ -71,7 +71,7 @@ int main() {
                         cout << "Escriba el nombre del archivo para inicializar el juego: ";
                         cin >> fileName;
                         juego.getGame().iniciarJuego(
-                                juego.getGame().inicializarJugadores(fileName)
+                                *juego.getGame().inicializarJugadores(fileName)
                                 );
                     } else {
                         juego.inicializarJuego();
@@ -102,6 +102,7 @@ int main() {
                     if (!primerTurno) {
                         juego.getGame().avanzarTurno(-1);
                     }
+                    break;
                 }
 
                 primerTurno = false;

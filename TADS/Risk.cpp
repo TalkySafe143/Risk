@@ -111,22 +111,22 @@ int Risk::inicializarDatos() {
     int n = 0;
 
     while (getline(territorios, line)) {
-        Territorio nuevo;
+        auto *nuevo = new Territorio();
         int i = 1;
         string token;
         istringstream ss(line);
 
         while (getline(ss, token, ';')) {
-            if (i == 1) nuevo.setIdTerritorio(token);
-            if (i == 2) nuevo.setIdContinente(token);
-            if (i == 4) nuevo.setNombre(token);
+            if (i == 1) nuevo->setIdTerritorio(token);
+            if (i == 2) nuevo->setIdContinente(token);
+            if (i == 4) nuevo->setNombre(token);
             i++;
         }
 
         for (Continente &continente: Risk::continentes) {
-            if (continente.getId() == nuevo.getIdContinente()) {
-                continente.agregarTerritorio(nuevo);
-                grafo.InsVertice(nuevo);
+            if (continente.getId() == nuevo->getIdContinente()) {
+                continente.agregarTerritorio(*nuevo);
+                grafo.InsVertice(*nuevo);
                 break;
             }
         }
@@ -230,8 +230,8 @@ int Risk::inicializarDatos() {
     return 1;
 }
 
-list<Jugador> Risk::inicializarJugadores(string file) {
-    list<Jugador> result;
+list<Jugador> *Risk::inicializarJugadores(string file) {
+    auto *result = new list<Jugador>();
     ifstream input(file);
 
     if (!input) return result;
@@ -245,7 +245,7 @@ list<Jugador> Risk::inicializarJugadores(string file) {
     for (int i = 0; i < numJugadores; i++) {
         Jugador jug;
 
-        jug.setId(to_string(i+1));
+        jug.setId(to_string(i));
         getline(input, line, ';');
         jug.setNombre(line);
         getline(input, line, ';');
@@ -292,7 +292,7 @@ list<Jugador> Risk::inicializarJugadores(string file) {
         int numCartas = stoi(line); // Sin usar?
 
         jug.setTerritorios(jugTerr);
-        result.push_back(jug);
+        result->push_back(jug);
     }
 
     return result;
@@ -395,7 +395,7 @@ void simularJugadas(string file) {
     archivo.close();
 }
 
-void Risk::iniciarJuego(list<Jugador> jugadores) {
+void Risk::iniciarJuego(list<Jugador> &jugadores) {
     Risk::jugadores = jugadores;
     Risk::turno = Risk::jugadores.begin();
 }

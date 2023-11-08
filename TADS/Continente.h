@@ -27,7 +27,7 @@ public:
     * Esta funcion tiene como proposito agregar un nuevo territorio al continente
     * @param nuevo El territorio nuevo a agregar
     */
-    void agregarTerritorio(Territorio nuevo);
+    void agregarTerritorio(Territorio &nuevo);
 
     /**
     * Esta funcion tiene como proposito eliminar un territorio en especifico

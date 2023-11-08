@@ -3,6 +3,7 @@
 //
 
 #include "Interfaces.h"
+#include "Grafo.cpp"
 
 Risk &Interfaces::getGame(){
     return game;
@@ -28,7 +29,7 @@ void Interfaces::inicializarJuego() {
 
 
     set<string> coloresSeleccionados;
-    list<Jugador> jugadores;
+    list<Jugador> *jugadores = new list<Jugador>;
     for (int i = 0; i < CantJugadores; i++) {
         Jugador jugador;
         string nombre, color;
@@ -49,6 +50,7 @@ void Interfaces::inicializarJuego() {
             coloresSeleccionados.insert(color);
             validColor = true;
             jugador.setColor(color);
+            jugador.setId(to_string(i));
         }
 
         int tropasRestantes;
@@ -92,10 +94,10 @@ void Interfaces::inicializarJuego() {
             tropasRestantes -= tropasSeleccionadas;
         }
 
-        jugadores.push_back(jugador);
+        jugadores->push_back(jugador);
     }
 
-    Interfaces::game.setJugadores(jugadores);
+    Interfaces::game.setJugadores(*jugadores);
 
     Interfaces::game.iniciarJuego(Interfaces::game.getJugadores());
 }
@@ -131,6 +133,24 @@ int Interfaces::asignarTropasTerritorio(int tropas, Jugador &jugador) {
             for (auto &territorio: continente.getTerritorios()) {
                 if (idTerritorio == territorio.getIdTerritorio()) {
                     territorio.setTropas(tropas);
+
+
+                    auto &vertexs = Interfaces::game.getGrafo().getVerticesNode();
+                    int u = 0;
+                    for (auto &someTerr: vertexs) {
+                        if (territorio == someTerr.getData()) {
+                            someTerr.getData().setTropas(tropas);
+                            break;
+                        }
+                        u++;
+                    }
+
+                    auto neighboors = Interfaces::game.getGrafo().sucesores(u);
+
+                    for (int v: neighboors) {
+                        Interfaces::game.getGrafo().changeArcCost(v, u, tropas);
+                    }
+
                     jugador.agregarTerritorio(territorio);
                     valid = true;
                     break;
@@ -149,7 +169,7 @@ int Interfaces::efectuarTurno() {
 
         int numTropas = Interfaces::game.reasignarTropas();
 
-        Interfaces::asignarTropasTerritorio(numTropas, *game.getTurno());
+        if (numTropas) Interfaces::asignarTropasTerritorio(numTropas, *game.getTurno());
 
         auto &territoriosAtacantes = Interfaces::game.getTurno()->getTerritorios();
         auto &grafoGame = Interfaces::game.getGrafo();
@@ -170,8 +190,8 @@ int Interfaces::efectuarTurno() {
 
         int from, i = 0, to=-1;
 
-        for (auto terr: grafoGame.getvertices()) {
-            if (terr.getIdTerritorio() == idFieldfrom) {
+        for (auto terr: grafoGame.getVerticesNode()) {
+            if (terr.getData().getIdTerritorio() == idFieldfrom) {
                 from = i;
                 break;
             }
@@ -183,10 +203,10 @@ int Interfaces::efectuarTurno() {
         for (auto vertex: grafoGame.sucesores(from)) {
             int j = 0;
             bool valid = true;
-            for (auto terGraph: grafoGame.getvertices()) {
+            for (auto terGraph: grafoGame.getVerticesNode()) {
                 if (j == vertex) {
                     for (auto fromTerr: territoriosAtacantes) {
-                        if (fromTerr.getIdTerritorio() == terGraph.getIdTerritorio()) {
+                        if (fromTerr.getIdTerritorio() == terGraph.getData().getIdTerritorio()) {
                             valid = false;
                             break;
                         }
@@ -195,8 +215,8 @@ int Interfaces::efectuarTurno() {
                     if (!valid) break;
 
                     validNeigh++;
-                    validFields.insert(terGraph.getIdTerritorio());
-                    cout << terGraph.getIdTerritorio() << " -> " << terGraph.getNombre() << endl;
+                    validFields.insert(terGraph.getData().getIdTerritorio());
+                    cout << terGraph.getData().getIdTerritorio() << " -> " << terGraph.getData().getNombre() << endl;
                     break;
                 }
                 j++;
@@ -218,10 +238,10 @@ int Interfaces::efectuarTurno() {
     for (auto vertex: grafoGame.sucesores(from)) {
         int j = 0;
         bool valid = true;
-        for (auto terGraph: grafoGame.getvertices()) {
+        for (auto terGraph: grafoGame.getVerticesNode()) {
             if (j == vertex) {
                 for (auto fromTerr: territoriosAtacantes) {
-                    if (idFieldTo == terGraph.getIdTerritorio()) {
+                    if (idFieldTo == terGraph.getData().getIdTerritorio()) {
                         to = vertex;
                         break;
                     }
@@ -276,10 +296,28 @@ int Interfaces::efectuarTurno() {
         cout << "¡Conquistaste el territorio el territorio! \n¿Cuantas tropas quieres mover para alla?\n";
         cout << "Tropas disponibles: " << fromGraphTerr.getData().getTropas() << ": ";
         cin >> tropasT;
+        toGraphTerr.getData().setTropas(tropasT);
 
-        int tropasMovidas = Interfaces::asignarTropasTerritorio(tropasT, *game.getTurno());
+        // Quitarle los territorios
+        for (auto &jug: game.getJugadores()) {
+            auto itDelete = jug.getTerritorios().begin();
+            for (auto &terrJug: jug.getTerritorios()) {
+                if (terrJug.getIdTerritorio() == toGraphTerr.getData().getIdTerritorio()) {
+                    jug.getTerritorios().erase(itDelete);
+                    break;
+                }
+                itDelete++;
+            }
+        }
 
-        fromGraphTerr.getData().setTropas(fromGraphTerr.getData().getTropas() - tropasMovidas);
+        Interfaces::game.getTurno()->agregarTerritorio(toGraphTerr.getData());
+        fromGraphTerr.getData().setTropas(fromGraphTerr.getData().getTropas() - tropasT);
+        for (auto &terr: Interfaces::game.getTurno()->getTerritorios()) {
+            if (terr == fromGraphTerr.getData()) {
+                terr.setTropas(fromGraphTerr.getData().getTropas());
+                break;
+            }
+        }
     }
 
     if (fromGraphTerr.getData().getTropas() == 0) {
@@ -287,15 +325,25 @@ int Interfaces::efectuarTurno() {
 
         for (auto &jug: game.getJugadores()) {
             for (auto &terrJug: jug.getTerritorios()) {
-                if (terrJug.getIdTerritorio() == toGraphTerr.getData().getIdContinente()) {
+                if (terrJug.getIdTerritorio() == toGraphTerr.getData().getIdTerritorio()) {
                     int tropasT;
                     cout << "Jugador " << jug.getNombre() << " conquistaste el territorio de " << game.getTurno()->getNombre() << "\n¿Cuantas tropas quieres mover para alla?\n";
                     cout << "Tropas disponibles: " << toGraphTerr.getData().getTropas() << ": ";
                     cin >> tropasT;
 
-                    int tropasMovidas = Interfaces::asignarTropasTerritorio(tropasT, jug);
+                    fromGraphTerr.getData().setTropas(tropasT);
 
-                    toGraphTerr.getData().setTropas(toGraphTerr.getData().getTropas() - tropasMovidas);
+                    auto itDelete = Interfaces::game.getTurno()->getTerritorios().begin();
+                    for (auto &terr: Interfaces::game.getTurno()->getTerritorios()) {
+                        if (terr.getIdTerritorio() == fromGraphTerr.getData().getIdTerritorio()) {
+                            Interfaces::game.getTurno()->getTerritorios().erase(itDelete);
+                            break;
+                        }
+                        itDelete++;
+                    }
+                    jug.agregarTerritorio(fromGraphTerr.getData());
+                    toGraphTerr.getData().setTropas(toGraphTerr.getData().getTropas() - tropasT);
+                    terrJug.setTropas(toGraphTerr.getData().getTropas());
                 }
             }
         }
@@ -305,9 +353,9 @@ int Interfaces::efectuarTurno() {
     cout << "Determine desde cual territorio quiere extraer sus tropas\n";
 
     validFields.clear();
-    for (auto terr: territoriosAtacantes) {
-        cout << terr.getIdContinente() << " -> " << terr.getNombre() << " con " << terr.getTropas() << " tropas.\n";
-        validFields.insert(terr.getIdContinente());
+    for (auto terr: Interfaces::game.getTurno()->getTerritorios()) {
+        cout << terr.getIdTerritorio() << " -> " << terr.getNombre() << " con " << terr.getTropas() << " tropas.\n";
+        validFields.insert(terr.getIdTerritorio());
     }
     string idFortificarFrom = "", idFortificarTo ="";
     while (!validFields.count(idFortificarFrom)) {
@@ -322,12 +370,12 @@ int Interfaces::efectuarTurno() {
     }
     int fortificarFrom, fortificarTo;
     i = 0;
-    for (auto terr: grafoGame.getvertices()) {
-        if (terr.getIdTerritorio() == idFortificarFrom) {
+    for (auto terr: grafoGame.getVerticesNode()) {
+        if (terr.getData().getIdTerritorio() == idFortificarFrom) {
             fortificarFrom = i;
         }
 
-        if (terr.getIdTerritorio() == idFortificarTo) {
+        if (terr.getData().getIdTerritorio() == idFortificarTo) {
             fortificarTo = i;
         }
         i++;
@@ -342,8 +390,19 @@ int Interfaces::efectuarTurno() {
     cout << "Tropas disponibles para mover: " << nodoFortificarFrom.getData().getTropas() << "\n¿Cuantas desea mover al otro territorio? ";
     cin >> tropasRefuerzo;
 
+
     nodoFortificarFrom.getData().setTropas(nodoFortificarFrom.getData().getTropas()-tropasRefuerzo);
     nodoFortificarTo.getData().setTropas(nodoFortificarTo.getData().getTropas()+tropasRefuerzo);
+
+    for (auto &terr: Interfaces::game.getTurno()->getTerritorios()) {
+        if (terr == nodoFortificarFrom.getData()) {
+            terr.setTropas(nodoFortificarFrom.getData().getTropas());
+        }
+        if (terr == nodoFortificarTo.getData()) {
+            terr.setTropas(nodoFortificarTo.getData().getTropas());
+        }
+
+    }
 
     auto continentesEnPoder = game.getTurno()->verificarContinentes(game.getContinentes());
 

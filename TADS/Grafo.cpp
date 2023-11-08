@@ -6,16 +6,16 @@
 #include "NodoG.cpp"
 
 template< class T >
-void Grafo<T>::InsVertice(T v) {
+void Grafo<T>::InsVertice(T &v) {
 
     for (auto node: Grafo<T>::vertices) {
         if (node.getData() == v) return;
     }
 
-    NodoG<T> nuevo;
-    nuevo.setData(v);
+    NodoG<T> *nuevo = new NodoG<T>();
+    nuevo->setData(v);
 
-    Grafo<T>::vertices.push_back(nuevo);
+    Grafo<T>::vertices.push_back(*nuevo);
 }
 
 template< class T >
