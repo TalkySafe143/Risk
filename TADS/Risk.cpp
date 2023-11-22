@@ -266,7 +266,7 @@ list<Jugador> *Risk::inicializarJugadores(string file) {
                 if (terr.getNombre() == "-1") continue;
                 terr.setTropas(tropas);
 
-                // Obtener todos los sucesores del territorio
+                // Obtener todos los sucesores del territorio   //asignar tropas pa cada territorio
                 auto &vertexs = Risk::grafo.getVerticesNode();
                 int u = 0;
                 for (auto &someTerr: vertexs) {
@@ -322,6 +322,7 @@ list<int> tirarDados(int numDados) {
 
     return resultados;
 }
+
 void simularJugada(string jugada) {
     stringstream ss(jugada);
     string atacanteStr, defensorStr;

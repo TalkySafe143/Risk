@@ -138,11 +138,11 @@ int Interfaces::asignarTropasTerritorio(int tropas, Jugador &jugador) {
                     auto &vertexs = Interfaces::game.getGrafo().getVerticesNode();
                     int u = 0;
                     for (auto &someTerr: vertexs) {
-                        if (territorio == someTerr.getData()) {
-                            someTerr.getData().setTropas(tropas);
+                        if (territorio == someTerr.getData()) {   //si mi territorio es el del grafo
+                            someTerr.getData().setTropas(tropas); //le asigno las tropas
                             break;
                         }
-                        u++;
+                        u++;                  //u representa la posicion de mi territorio en la lista
                     }
 
                     auto neighboors = Interfaces::game.getGrafo().sucesores(u);

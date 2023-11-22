@@ -66,7 +66,7 @@ int main() {
                         cin >> initOption;
                     } while (initOption != 1 && initOption != 0);
 
-                    if (initOption == 1) {
+                    if (initOption == 1) {  //inicializar con archivo
                         string fileName;
                         cout << "Escriba el nombre del archivo para inicializar el juego: ";
                         cin >> fileName;
