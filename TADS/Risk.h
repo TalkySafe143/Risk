@@ -103,6 +103,8 @@ public:
      */
     Jugador avanzarTurno(int move);
 
+    list<Territorio> conquista_mas_barata(Grafo<Territorio> grafo, int s);
+
     bool esCombinacionValida(std::list<Carta>& cartas);
 
     void retirarCartasUtilizadas(std::list<Carta>& cartas, const std::list<Territorio>& territorios);

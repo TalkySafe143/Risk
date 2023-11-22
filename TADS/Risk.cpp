@@ -543,3 +543,65 @@ list<int> Risk::tirarDados(int numDados) {
 
     return resultados;
 }
+
+
+
+/// de pronto es así, quien sabe///
+///conquista_mas_barata
+//de todos los territorios posibles, calcular aquel que pueda implicar un menor número de unidades de ejecito perdidas
+
+
+list<Territorio> Risk::conquista_mas_barata(Grafo<Territorio> grafo, int s){ // s: la posicion en la lista del territorio
+    list<Territorio> grafoL = grafo.getvertices();
+    unsigned long long n = grafoL.size();
+    vector<int>  d(n, INT_MAX);  //lengths of shortest paths
+    vector<bool> u(n, false);    //visitados
+    vector<int> p(n, -1);        //array of predecessors
+
+    d[s]=0;
+    for (int i = 0; i < n; i++) { //all vertices
+        int v = -1;
+        for (int j = 0; j < n; j++) { //all vertices
+            if (!u[j] && (v == -1 || d[j] < d[v])) //choose the smallest unselected
+                v = j;
+        }
+
+        if (d[v] == INT_MAX) //unreachable
+            break;
+
+        u[v] = true;
+        for (auto to : grafo.sucesores(v)) {
+            int len = grafo.CostoArco(v, to);
+
+            if (d[v] + len < d[to]) { //(cNuevo < cViejo)
+                d[to] = d[v] + len;
+                p[to] = v;
+            }
+        }
+    }
+
+    int distanciaMin;
+    int verticeMin;
+    for (int i = 0; i < n; i++) {
+        if(d[i] < distanciaMin) {
+            distanciaMin = d[i];
+            verticeMin = i;
+        }
+    }
+
+
+    list<int> camino;
+    int destino = verticeMin;
+    while (destino != -1) {
+        camino.push_front(destino);
+        destino = p[destino]; //concepto de p[]
+    }
+
+    list<Territorio> camino_territorios;
+    for (int it : camino) {
+        camino_territorios.push_back(grafo.InfoVertice(it));
+    }
+
+    return camino_territorios;
+
+}
