@@ -167,12 +167,21 @@ int Interfaces::asignarTropasTerritorio(int tropas, Jugador &jugador) {
 int Interfaces::efectuarTurno() {
         cout << "------- Obteniendo nuevas unidades de ejercito -------\n";
 
+        // Mira las tropas que le corresponde por los territorios y los continentes
         int numTropas = Interfaces::game.reasignarTropas();
 
-        if (numTropas) Interfaces::asignarTropasTerritorio(numTropas, *game.getTurno());
+        // Cuando tenga 3 cartas se intercambian por tropas
+        numTropas += Interfaces::game.intercambiarCartas();
 
+        if (numTropas > 0) Interfaces::asignarTropasTerritorio(numTropas, *game.getTurno());
+
+        // Coge la lista de territorios del atacante
         auto &territoriosAtacantes = Interfaces::game.getTurno()->getTerritorios();
+
+        // Recuperamos el grafo del juego
         auto &grafoGame = Interfaces::game.getGrafo();
+
+        // Se hace un set para ingresar los IDs/Opciones validas
         set<string>validFields;
 
         attack:
@@ -183,6 +192,10 @@ int Interfaces::efectuarTurno() {
             validFields.insert(terr.getIdTerritorio());
         }
         string idFieldfrom = "";
+
+        // set.count() cuenta cuantas veces hay un string en el set, si no está entonces retorna 0
+        // Si la opcion que ingrese el usuario no esta dentro del set, quiere decir que es un territorio invalido
+        // Si el ID no esta en el set, quiere decir que el jugador NO tiene ese territorio
         while (!validFields.count(idFieldfrom)) {
             cout << "Escriba el ID del territorio: ";
             cin >> idFieldfrom;
@@ -190,6 +203,7 @@ int Interfaces::efectuarTurno() {
 
         int from, i = 0, to=-1;
 
+        // Aqui se obtiene la posicion del vertice en el grafo del territorio seleccionado
         for (auto terr: grafoGame.getVerticesNode()) {
             if (terr.getData().getIdTerritorio() == idFieldfrom) {
                 from = i;
@@ -197,17 +211,26 @@ int Interfaces::efectuarTurno() {
             }
             i++;
         }
+
+        // Se limpia el set (Elimina los elementos que tenga) para volver a utilizarlo
         validFields.clear();
         cout << "¿A que territorio quiere atacar?\n";
         int validNeigh = 0;
+
+        // Se recuperan los territorios adyancentes de forma de vertices del grafo
         for (auto vertex: grafoGame.sucesores(from)) {
             int j = 0;
             bool valid = true;
+
+            // Como los vertices se toman como las posiciones de la lista de vertices, se busca por la lista de vertices
             for (auto terGraph: grafoGame.getVerticesNode()) {
+                // Para evitar hacerlo con iteradores se utiliza el for
                 if (j == vertex) {
+                    // Cuando encuentra el vertice que estamos buscando del grafo
                     for (auto fromTerr: territoriosAtacantes) {
+                        // Se verifica si el jugador ya tiene ese territorio
                         if (fromTerr.getIdTerritorio() == terGraph.getData().getIdTerritorio()) {
-                            valid = false;
+                            valid = false; // En caso de que el jugador ya tenga el territorio, se indica como que no es valido
                             break;
                         }
                     }
@@ -215,6 +238,7 @@ int Interfaces::efectuarTurno() {
                     if (!valid) break;
 
                     validNeigh++;
+                    // Imprime los territorios adyacentes
                     validFields.insert(terGraph.getData().getIdTerritorio());
                     cout << terGraph.getData().getIdTerritorio() << " -> " << terGraph.getData().getNombre() << endl;
                     break;
@@ -230,11 +254,14 @@ int Interfaces::efectuarTurno() {
 
         string idFieldTo="";
 
+        // COn el mismo mecanismo del set, se pide la opcion de que territorio adyacente desea atacar
         while (!validFields.count(idFieldTo)) {
             cout << "Seleccione que territorio quiere atacar: ";
             cin >> idFieldTo;
         }
 
+
+        // Este for tiene como objetivo obtener la posicion del vertice de la opcion que se escogió
     for (auto vertex: grafoGame.sucesores(from)) {
         int j = 0;
         bool valid = true;
@@ -253,7 +280,11 @@ int Interfaces::efectuarTurno() {
         if (to != -1) break;
     }
 
+
+    // En esta parte se toman las referencias del NODO del grafo al que corresponden el territorio atacante y el defensor
     auto nodoGraph = grafoGame.getVerticesNode().begin();
+
+    // Por medio del advance y de la posicion del vertice, se puede obtener el nodo de la lista
     advance(nodoGraph, from);
     auto &fromGraphTerr = *nodoGraph;
     nodoGraph = grafoGame.getVerticesNode().begin();
@@ -262,6 +293,8 @@ int Interfaces::efectuarTurno() {
 
     cout << "------- ¡Hora de tirar los dados! -------\n";
     int optionContinue = -1;
+
+    // Va a tirar los dados mientras algunos de los dos territorios tengan tropas y se desee continuar
     while (fromGraphTerr.getData().getTropas() > 0 && toGraphTerr.getData().getTropas() > 0 && optionContinue != 0) {
 
         auto dadosAtacante = game.tirarDados(3);
@@ -280,10 +313,13 @@ int Interfaces::efectuarTurno() {
         sumAtacante += *itDados;
 
         if (sumAtacante > sumDefensor) {
+            cout << "EL atacante gano la tirada de los dados.\n";
             toGraphTerr.getData().setTropas(toGraphTerr.getData().getTropas()-1);
         } else if (sumAtacante < sumDefensor) {
+            cout << "EL defensor gano la tirada de los dados.\n";
             fromGraphTerr.getData().setTropas(fromGraphTerr.getData().getTropas()-1);
         } else {
+            cout << "EL defensor gano la tirada de los dados.\n";
             fromGraphTerr.getData().setTropas(fromGraphTerr.getData().getTropas()-1);
         }
 
@@ -298,7 +334,7 @@ int Interfaces::efectuarTurno() {
         cin >> tropasT;
         toGraphTerr.getData().setTropas(tropasT);
 
-        // Quitarle los territorios
+        // Quitarle los territorios al otro jugador
         for (auto &jug: game.getJugadores()) {
             auto itDelete = jug.getTerritorios().begin();
             for (auto &terrJug: jug.getTerritorios()) {
@@ -310,16 +346,33 @@ int Interfaces::efectuarTurno() {
             }
         }
 
+        // Vamos a buscar la carta que corresponde a el territorio que ganamos
+        auto cardDelete = Interfaces::game.getCartas().begin();
+        for (auto &carta: Interfaces::game.getCartas()) {
+            if (carta.getIdTerritorio() == toGraphTerr.getData().getIdTerritorio()) {
+                Interfaces::game.getTurno()->agregarCarta(carta);
+                break;
+            }
+
+            cardDelete++;
+        }
+
+        // Quitamos la carta de la mesa
+        Interfaces::game.getCartas().erase(cardDelete);
+
+        // Se agregan los territorios y se modifican los valores en el grafo y en el juego
         Interfaces::game.getTurno()->agregarTerritorio(toGraphTerr.getData());
         fromGraphTerr.getData().setTropas(fromGraphTerr.getData().getTropas() - tropasT);
         for (auto &terr: Interfaces::game.getTurno()->getTerritorios()) {
             if (terr == fromGraphTerr.getData()) {
+                // Esta comparacion es posible porque a Territorio le sobrecargamos un operador
                 terr.setTropas(fromGraphTerr.getData().getTropas());
                 break;
             }
         }
     }
 
+    // El atacante perdió
     if (fromGraphTerr.getData().getTropas() == 0) {
         cout << "Lo sentimos, perdiste el territorio):\n";
 
@@ -346,6 +399,21 @@ int Interfaces::efectuarTurno() {
                     terrJug.setTropas(toGraphTerr.getData().getTropas());
                 }
             }
+
+            // Vamos a buscar la carta que corresponde a el territorio que ganamos
+            auto cardDelete = Interfaces::game.getCartas().begin();
+            for (auto &carta: Interfaces::game.getCartas()) {
+                if (carta.getIdTerritorio() == fromGraphTerr.getData().getIdTerritorio()) {
+                    jug.agregarCarta(carta);
+                    break;
+                }
+
+                cardDelete++;
+            }
+
+            // Quitamos la carta de la mesa
+            Interfaces::game.getCartas().erase(cardDelete);
+
         }
     }
 

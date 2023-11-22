@@ -39,6 +39,7 @@ void Risk::setTurno(const list<Jugador>::iterator &turno) {
 
 int Risk::inicializarDatos() {
     cout << "Inicializando...\n";
+    Risk::gruposCartasIntercambiados = 0;
     ifstream cards("../Data/Cards.csv");
     list<Carta> nuevasCartas;
 
@@ -430,10 +431,10 @@ bool Risk::esCombinacionValida(std::list<Carta>& cartas) {
     // Supongamos que 'tipo' es un miembro de 'Carta' que indica si es de infantería, caballería, artillería o comodín.
     int infanteria = 0, caballeria = 0, artilleria = 0, comodines = 0;
     for (Carta& carta : cartas) {
-        if (carta.getId() == "infanteria") ++infanteria;
-        else if (carta.getId() == "caballeria") ++caballeria;
-        else if (carta.getId() == "artilleria") ++artilleria;
-        else if (carta.getId() == "comodin") ++comodines;
+        if (carta.getValue() == 1) ++infanteria;
+        else if (carta.getValue() == 5) ++caballeria;
+        else if (carta.getValue() == 10) ++artilleria;
+        else if (carta.getIdTerritorio() == "-1") ++comodines;
     }
 
     // Verifica las combinaciones válidas
@@ -449,82 +450,31 @@ bool Risk::esCombinacionValida(std::list<Carta>& cartas) {
 
     return false;
 }
-void Risk::retirarCartasUtilizadas(std::list<Carta>& cartas, const std::list<Territorio>& territorios) {
-    // Suponemos que 'cartas' contiene al menos 3 cartas que forman una combinación válida.
 
-    // Contadores para las cartas de cada tipo.
-    int infanteria = 0, caballeria = 0, artilleria = 0, comodines = 0;
-
-    // Contar las cartas de cada tipo.
-    for (auto& carta : cartas) {
-        if (carta.getId() == "Infanteria") infanteria++;
-        else if (carta.getId() == "Caballeria") caballeria++;
-        else if (carta.getId() == "Artilleria") artilleria++;
-        else if (carta.getId() == "Comodin") comodines++;
-    }
-
-    // Determinar qué cartas retirar.
-    std::list<Carta>::iterator it = cartas.begin();
-    while (it != cartas.end()) {
-        bool cartaEliminada = false;
-        if (comodines > 0 && it->getId() == "Comodin") {
-            // Eliminar un comodín.
-            it = cartas.erase(it);
-            comodines--;
-            cartaEliminada = true;
-        } else if (infanteria > 0 && it->getId() == "Infanteria") {
-            // Eliminar una carta de infantería.
-            it = cartas.erase(it);
-            infanteria--;
-            cartaEliminada = true;
-        } else if (caballeria > 0 && it->getId() == "Caballeria") {
-            // Eliminar una carta de caballería.
-            it = cartas.erase(it);
-            caballeria--;
-            cartaEliminada = true;
-        } else if (artilleria > 0 && it->getId() == "Artilleria") {
-            // Eliminar una carta de artillería.
-            it = cartas.erase(it);
-            artilleria--;
-            cartaEliminada = true;
-        }
-
-        // Si no se eliminó ninguna carta, avanzamos al siguiente elemento.
-        if (!cartaEliminada) {
-            ++it;
-        }
-
-        // Si hemos eliminado tres cartas, salimos del bucle.
-        if ((3 - comodines - infanteria - caballeria - artilleria) >= 3) {
-            break;
-        }
-    }
-}
-int Risk::intercambiarCartas(std::list<Carta>& cartas, const std::list<Territorio>& territorios, int& gruposIntercambiados) {
+int Risk::intercambiarCartas() {
     int unidades = 0;
+
+    auto &cartas = Risk::turno->getCartas();
 
     if (cartas.size() >= 3 && esCombinacionValida(cartas)) {
         // Calcula las unidades adicionales basadas en la cantidad de intercambios realizados previamente
-        if (gruposIntercambiados < 5) {
-            unidades += 4 + gruposIntercambiados * 2;
+        if (gruposCartasIntercambiados < 5) {
+            unidades += 4 + gruposCartasIntercambiados * 2;
         } else {
-            unidades += 15 + (gruposIntercambiados - 5) * 5;
+            unidades += 15 + (gruposCartasIntercambiados - 5) * 5;
         }
 
-        // Calcula las unidades extra por cartas que coinciden con territorios ocupados
-        /*for (auto& carta : cartas) {
-            if (std::any_of(territorios.begin(), territorios.end(), [&carta](const Territorio& territorio) {
-                return carta.getIdTerritorio() == territorio.getNombre() && territorio.getTropas();
-            })) {
-                unidades += 2; // Asume que solo se cuentan una vez las unidades extras por cartas/territorios
-            }
-        }*/
+        for (auto &carta: Risk::turno->getCartas()) {
+            Risk::cartas.push_back(carta);
+        }
+
+        Risk::turno->getCartas().clear();
 
         // Retira las cartas utilizadas para el intercambio
-        retirarCartasUtilizadas(cartas, territorios);
+        //retirarCartasUtilizadas(cartas, territorios);
 
         // Incrementa el contador de grupos intercambiados
-        gruposIntercambiados++;
+        Risk::gruposCartasIntercambiados++;
     }
 
     return unidades;

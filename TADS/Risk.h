@@ -23,6 +23,7 @@ private:
     list<Carta> cartas;
     list<Jugador>::iterator turno; // Se usa internamente en varios metodos
     Grafo<Territorio> grafo;
+    int gruposCartasIntercambiados;
 public:
     /**
      * Esta funcion tiene como proposito inicializar los datos de los continentes
