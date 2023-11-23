@@ -548,10 +548,11 @@ list<int> Risk::tirarDados(int numDados) {
 
 /// de pronto es así, quien sabe///
 ///conquista_mas_barata
+//entiendo que es la conquista más barata de todo el juego
 //de todos los territorios posibles, calcular aquel que pueda implicar un menor número de unidades de ejecito perdidas
 
 
-list<Territorio> Risk::conquista_mas_barata(Grafo<Territorio> grafo, int s){ // s: la posicion en la lista del territorio
+list<Territorio> Risk::conquistaMasBarata(Grafo<Territorio> grafo, int s, int &c){ // s: la posicion en la lista del territorio
     list<Territorio> grafoL = grafo.getvertices();
     unsigned long long n = grafoL.size();
     vector<int>  d(n, INT_MAX);  //lengths of shortest paths
@@ -601,7 +602,7 @@ list<Territorio> Risk::conquista_mas_barata(Grafo<Territorio> grafo, int s){ // 
     for (int it : camino) {
         camino_territorios.push_back(grafo.InfoVertice(it));
     }
-
+    c = distanciaMin;
     return camino_territorios;
 
 }

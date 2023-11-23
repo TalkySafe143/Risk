@@ -11,7 +11,8 @@ enum StringOptions {
     invalido,
     guardar,
     guardar_comprimido,
-    inicializar_comprimido
+    inicializar_comprimido,
+    conquista_mas_barata
 };
 
 StringOptions evalString(string a) {
@@ -20,6 +21,7 @@ StringOptions evalString(string a) {
     else if (a == "guardar") return guardar;
     else if (a == "guardar_comprimido") return guardar_comprimido;
     else if (a == "inicializar_comprimido") return inicializar_comprimido;
+    else if (a == "conquista_mas_barata") return conquista_mas_barata;
     else return invalido;
 }
 
@@ -152,6 +154,38 @@ int main() {
                 cout << "Se ha escrito el archivo en " << saveGame.decode(*it) << " por favor, ingrese el comando inicializar para indicar la incialización con dicho archivo"  << endl;
 
                 break;
+            }
+
+            case conquista_mas_barata: {
+
+                if (juegoFinalizado) {
+                    cout << "Esta partida ya tuvo un ganador.\n";
+                    break;
+                }
+                list<Territorio> grafoLista = juego.getGame().getGrafo().getvertices();
+                Grafo<Territorio> grafo = juego.getGame().getGrafo();
+                list<Territorio> territorios = juego.getGame().getTurno()->getTerritorios();
+                unsigned long long n = grafoLista.size();
+                queue<int> pos ; //la posicion del territorio del jugador en la lista del grafo
+
+                for(Territorio tJugador : territorios){
+                    for(int i=0; i<n; i++){
+                        if(tJugador == grafo.InfoVertice(i)){
+                            pos.push(i);
+                        }
+                    }
+                }
+
+                //llamo el dijkstra para todos los territorios del jugador
+                int c=0; int costoMin=0;
+                for(int i=0; i<pos.size(); i++){
+                    juego.getGame().conquistaMasBarata(juego.getGame().getGrafo(), pos.front(), c);
+                    if(c < costoMin){
+                        costoMin = c;
+                    }
+                    pos.pop();
+                }
+                cout<<"Para la conquista más barata debe conquistar " << costoMin<<" unidades de ejercito";
             }
 
             default:
