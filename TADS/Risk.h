@@ -130,6 +130,8 @@ public:
     Grafo<Territorio> &getGrafo();
 
     int intercambiarCartas(list<Carta> &cartas, const list<Territorio> &territorios, int &gruposIntercambiados);
+
+    void modificarAristas(Jugador jug);
 };
 
 

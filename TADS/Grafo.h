@@ -35,6 +35,7 @@ public:
 
     list<Grafo<T>> componentesConexos(Grafo<T> graph);
 
+    void Dijkstra(int S, vector<int> &dist, vector<int> &parent);
 };
 
 #endif //PROYECTO_GRAFO_H

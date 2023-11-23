@@ -211,3 +211,42 @@ template<class T>
 list<NodoG<T>>& Grafo<T>::getVerticesNode() {
     return Grafo<T>::vertices;
 }
+
+
+template< class T >
+void Grafo<T>::Dijkstra(int S, vector<int> &dist, vector<int>&parent) {
+
+    for (int i = 0; i < dist.size(); i++) {
+        dist[i] = 1e6;
+        parent[i] = -1;
+    }
+
+    priority_queue<pair<int, int>, vector< pair<int, int> >, greater<pair<int, int>>> pq;
+    dist[S] = 0;
+    pq.push(make_pair(0, S));
+    while (!pq.empty()) {
+        pair<int, int> V = pq.top(); pq.pop();
+        int dist_V = V.first;
+        int vertex_V = V.second;
+        if (dist_V > dist[vertex_V]) continue;
+
+        auto itSuc = this->getVerticesNode().begin();
+        advance(itSuc, vertex_V);
+
+        for (auto arc: itSuc->getAdj()) {
+            auto node = arc.first;
+            auto len = arc.second;
+            int to = 0;
+            for (auto n: this->getVerticesNode()) {
+                if (n == node) break;
+                to++;
+            }
+
+            if (dist[vertex_V] + len < dist[to]) {
+                dist[to] = dist[vertex_V] + len;
+                parent[to] = vertex_V;
+                pq.push(make_pair(dist[to], to));
+            }
+        }
+    }
+}

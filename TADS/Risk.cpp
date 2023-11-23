@@ -551,7 +551,7 @@ list<int> Risk::tirarDados(int numDados) {
 //entiendo que es la conquista más barata de todo el juego
 //de todos los territorios posibles, calcular aquel que pueda implicar un menor número de unidades de ejecito perdidas
 
-
+/*
 list<Territorio> Risk::conquistaMasBarata(Grafo<Territorio> grafo, int s, int &c){ // s: la posicion en la lista del territorio
     list<Territorio> grafoL = grafo.getvertices();
     unsigned long long n = grafoL.size();
@@ -605,4 +605,31 @@ list<Territorio> Risk::conquistaMasBarata(Grafo<Territorio> grafo, int s, int &c
     c = distanciaMin;
     return camino_territorios;
 
+}
+*/
+
+/**Osea, usted le pasa el jugador a la función y modifica todas las aristas
+
+Si es un territorio del jugador, el costo de la arista es 0
+
+Si es otro territorio, el costo de la arista debe ser el número de tropas en el territorio
+ */
+void Risk::modificarAristas(Jugador jug){
+    list<Territorio> territorios = jug.getTerritorios();
+    list<Territorio> GrafoLista = Risk::grafo.getvertices();
+    for(Territorio terrJug : territorios){//los del jugador
+        for(int i=0; i< GrafoLista.size(); i++){//los del grafo
+            if(terrJug != Risk::grafo.InfoVertice(i)){
+                //Si es otro territorio, el costo de la arista debe ser el número de tropas en el territorio
+                for(auto sus : Risk::grafo.sucesores(i)){
+                    int noTropas = Risk::grafo.InfoVertice(i).getTropas();
+                    Risk::grafo.InsArco(i, sus, noTropas);
+                }
+            }
+            //Si es un territorio del jugador, el costo de la arista es 0
+            for(auto sus : Risk::grafo.sucesores(i)){
+                Risk::grafo.InsArco(i, sus, 0);
+            }
+        }
+    }
 }

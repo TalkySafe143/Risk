@@ -162,11 +162,12 @@ int main() {
                     cout << "Esta partida ya tuvo un ganador.\n";
                     break;
                 }
+
                 list<Territorio> grafoLista = juego.getGame().getGrafo().getvertices();
                 Grafo<Territorio> grafo = juego.getGame().getGrafo();
                 list<Territorio> territorios = juego.getGame().getTurno()->getTerritorios();
                 unsigned long long n = grafoLista.size();
-                queue<int> pos ; //la posicion del territorio del jugador en la lista del grafo
+                queue<int> pos ; //QUEUE con la posicion del territorio del jugador en la lista del grafo
 
                 for(Territorio tJugador : territorios){
                     for(int i=0; i<n; i++){
@@ -177,15 +178,23 @@ int main() {
                 }
 
                 //llamo el dijkstra para todos los territorios del jugador
-                int c=0; int costoMin=0;
-                for(int i=0; i<pos.size(); i++){
-                    juego.getGame().conquistaMasBarata(juego.getGame().getGrafo(), pos.front(), c);
-                    if(c < costoMin){
-                        costoMin = c;
+                int c=0;
+                int distanciaMin;
+                while(!pos.empty()){
+                    //juego.getGame().conquistaMasBarata(juego.getGame().getGrafo(), pos.front(), c);
+                    vector<int> dist(n,0);
+                    vector<int> parent(n,0);
+
+                    juego.getGame().getGrafo().Dijkstra(0, dist, parent);
+
+                    for(int valMin : dist){
+                        if(valMin < distanciaMin){
+                            distanciaMin = valMin;
+                        }
                     }
                     pos.pop();
                 }
-                cout<<"Para la conquista más barata debe conquistar " << costoMin<<" unidades de ejercito";
+                cout<<"Para la conquista más barata debe conquistar " << distanciaMin<<" unidades de ejercito";
             }
 
             default:
