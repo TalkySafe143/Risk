@@ -546,18 +546,21 @@ list<int> Risk::tirarDados(int numDados) {
 void Risk::actualizarAristasGrafo(Jugador jug) {
     list<Territorio> territorios = jug.getTerritorios();
     list<Territorio> GrafoLista = Risk::grafo.getvertices();
-    for(Territorio terrJug : territorios){//los del jugador
-        for(int i=0; i< GrafoLista.size(); i++){//los del grafo
-            if(terrJug != Risk::grafo.InfoVertice(i)){
-                //Si es otro territorio, el costo de la arista debe ser el número de tropas en el territorio
-                for(auto sus : Risk::grafo.sucesores(i)){
-                    int noTropas = Risk::grafo.InfoVertice(i).getTropas();
-                    Risk::grafo.InsArco(i, sus, noTropas);
+    for(int i=0; i< GrafoLista.size(); i++){//los del grafo
+        for(auto sus : Risk::grafo.sucesores(i)){
+            auto it = GrafoLista.begin();
+            advance(it, sus);
+            bool foundTerr = false;
+            for (Territorio jugTerr: territorios) {
+                if (*it == jugTerr) {
+                    foundTerr = true;
+                    break;
                 }
             }
-            //Si es un territorio del jugador, el costo de la arista es 0
-            for(auto sus : Risk::grafo.sucesores(i)){
-                Risk::grafo.InsArco(i, sus, 0);
+            if (foundTerr) { // Es un territorio del jugador al que queremos ir
+                Risk::grafo.changeArcCost(i, sus, 0);
+            } else {
+                Risk::grafo.changeArcCost(i, sus, it->getTropas());
             }
         }
     }
@@ -565,7 +568,7 @@ void Risk::actualizarAristasGrafo(Jugador jug) {
 
 
 pair<int, list<Territorio>> Risk::conquistaMasBarata() {
-    this->actualizarAristasGrafo(*(this->turno));
+    Risk::actualizarAristasGrafo(*(this->turno));
     int n = this->grafo.getvertices().size();
     vector<  pair<  int, pair< int, vector< int > > > > parentDistTerr;
     for (Territorio terr: this->turno->getTerritorios()) {
@@ -608,9 +611,9 @@ pair<int, list<Territorio>> Risk::conquistaMasBarata() {
     ans.first = parentDistTerr[0].first;
 
     for (int p = parentDistTerr[0].second.first; p != -1; p = parentDistTerr[0].second.second[p]) {
-        auto it = this->grafo.getvertices().begin();
+        auto it = this->grafo.getVerticesNode().begin();
         advance(it, p);
-        ans.second.push_front(*it);
+        ans.second.push_front(it->getData());
     }
 
     return ans;
@@ -619,11 +622,11 @@ pair<int, list<Territorio>> Risk::conquistaMasBarata() {
 pair<int, list<Territorio>> Risk::costoConquista(string codeTerr) {
     this->actualizarAristasGrafo(*(this->turno));
     Territorio found;
-    list<Territorio> litGraph = this->grafo.getvertices();
+    auto litGraph = this->grafo.getVerticesNode();
     int vertexTo, i = 0;
     for (auto terrGr: litGraph) {
-        if (terrGr.getIdTerritorio() == codeTerr) {
-            found = terrGr;
+        if (terrGr.getData().getIdTerritorio() == codeTerr) {
+            found = terrGr.getData();
             vertexTo = i;
             break;
         }
@@ -649,7 +652,7 @@ pair<int, list<Territorio>> Risk::costoConquista(string codeTerr) {
         auto it = litGraph.begin();
         advance(it, node);
         for (Territorio terrJug: this->turno->getTerritorios()) {
-            if (*it == terrJug) {
+            if (it->getData() == terrJug) {
                 vertexFrom = node;
                 foundFrom = true;
                 break;
@@ -670,7 +673,7 @@ pair<int, list<Territorio>> Risk::costoConquista(string codeTerr) {
     for (int p = vertexTo; p != -1; p = parent[p]) {
         auto it = litGraph.begin();
         advance(it, p);
-        ans.second.push_front(*it);
+        ans.second.push_front(it->getData());
     }
 
     return ans;
