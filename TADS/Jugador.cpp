@@ -72,3 +72,7 @@ int Jugador::modificarTropasTerritorio(Territorio field, int num) {
 void Jugador::agregarTerritorio(Territorio nuevo) {
     Jugador::territorios.push_back(nuevo);
 }
+
+void Jugador::agregarCarta(const Carta carta) {
+    this->cartas.push_back(carta);
+}

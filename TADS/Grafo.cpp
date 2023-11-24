@@ -144,7 +144,7 @@ list<int> Grafo<T>::sucesores(int v1) {
 }
 
 template< class T >
-list< T > &Grafo<T>::getvertices() {
+list< T > Grafo<T>::getvertices() {
     list<T> vertex;
     for (auto node: Grafo<T>::vertices) {
         vertex.push_back(node.getData());
@@ -210,4 +210,124 @@ void Grafo<T>::changeArcCost(int from, int to, int cNew) {
 template<class T>
 list<NodoG<T>>& Grafo<T>::getVerticesNode() {
     return Grafo<T>::vertices;
+}
+
+/**
+ * Esta funcion le recibe los vectores de la distancia como parametros por referencia
+ * Todo lo que se cambie acá se va a ver reflejado despues de la funcion
+ *
+*/
+template< class T >
+void Grafo<T>::Dijkstra(int S, vector<int> &dist, vector<int>&parent) {
+
+    for (int i = 0; i < dist.size(); i++) {
+        dist[i] = 1e6;
+        parent[i] = -1;
+    }
+
+    priority_queue<pair<int, int>, vector< pair<int, int> >, greater<pair<int, int>>> pq;
+    dist[S] = 0;
+    pq.push(make_pair(0, S));
+    while (!pq.empty()) {
+        pair<int, int> V = pq.top(); pq.pop();
+        int dist_V = V.first;
+        int vertex_V = V.second;
+        if (dist_V > dist[vertex_V]) continue;
+
+        auto itSuc = this->getVerticesNode().begin();
+        advance(itSuc, vertex_V);
+
+        for (auto arc: itSuc->getAdj()) {
+            auto node = arc.first.get();
+            auto len = arc.second;
+            int to = 0;
+            for (auto n: this->getVerticesNode()) {
+                if (n == node) break;
+                to++;
+            }
+
+            if (dist[vertex_V] + len < dist[to]) {
+                dist[to] = dist[vertex_V] + len;
+                parent[to] = vertex_V;
+                pq.push(make_pair(dist[to], to));
+            }
+        }
+    }
+}
+
+/**
+ * Este BFS esta modificado para que las distancias sean los pesos de las aristas
+*/
+template<class T>
+void Grafo<T>::BFSCost(int S, vector<int>&dist, vector<int>&parent) {
+    for (int i = 0; i < dist.size(); i++) {
+        dist[i] = 1e6;
+        parent[i] = -1;
+    }
+
+    queue<int> q;
+    dist[S] = 0;
+    q.push(S);
+    this->DesmarcarGrafo();
+    this->MarcarVertice(S);
+    while (!q.empty()) {
+        int V = q.front(); q.pop();
+
+        auto itSuc = this->getVerticesNode().begin();
+        advance(itSuc, V);
+
+        for (auto arc: itSuc->getAdj()) {
+            auto node = arc.first.get();
+            auto len = arc.second;
+            int to = 0;
+            for (auto n: this->getVerticesNode()) {
+                if (n == node) break;
+                to++;
+            }
+
+            if (!this->MarcadoVertice(to)) {
+                this->MarcarVertice(to);
+                dist[to] = dist[V] + len;
+                parent[to] = V;
+                q.push(to);
+            }
+        }
+    }
+}
+
+template<class T>
+void Grafo<T>::BFSStandard(int S, vector<int> &dist, vector<int> &parent) {
+    for (int i = 0; i < dist.size(); i++) {
+        dist[i] = 1e6;
+        parent[i] = -1;
+    }
+
+    queue<int> q;
+    dist[S] = 0;
+    q.push(S);
+    this->DesmarcarGrafo();
+    this->MarcarVertice(S);
+    while (!q.empty()) {
+        int V = q.front(); q.pop();
+
+        auto itSuc = this->getVerticesNode().begin();
+        advance(itSuc, V);
+
+        for (auto arc: itSuc->getAdj()) {
+            auto node = arc.first.get();
+            auto len = arc.second;
+            int to = 0;
+            for (auto n: this->getVerticesNode()) {
+                if (n == node) break;
+                to++;
+            }
+
+            if (!this->MarcadoVertice(to)) {
+                this->MarcarVertice(to);
+                dist[to] = dist[V] + 1;
+                parent[to] = V;
+                q.push(to);
+            }
+        }
+    }
 }

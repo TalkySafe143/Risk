@@ -11,7 +11,9 @@ enum StringOptions {
     invalido,
     guardar,
     guardar_comprimido,
-    inicializar_comprimido
+    inicializar_comprimido,
+    conquista_mas_barata,
+    costo_conquista
 };
 
 StringOptions evalString(string a) {
@@ -20,6 +22,8 @@ StringOptions evalString(string a) {
     else if (a == "guardar") return guardar;
     else if (a == "guardar_comprimido") return guardar_comprimido;
     else if (a == "inicializar_comprimido") return inicializar_comprimido;
+    else if (a == "conquista_mas_barata") return conquista_mas_barata;
+    else if (a == "costo_conquista") return costo_conquista;
     else return invalido;
 }
 
@@ -152,6 +156,48 @@ int main() {
                 cout << "Se ha escrito el archivo en " << saveGame.decode(*it) << " por favor, ingrese el comando inicializar para indicar la incialización con dicho archivo"  << endl;
 
                 break;
+            }
+
+            case conquista_mas_barata: {
+                pair<int, list<Territorio>> q = juego.getGame().conquistaMasBarata();
+                auto it = q.second.end();
+                advance(it, -1);
+                Territorio last = *it;
+                cout << "La conquista más barata es avanzar sobre el territorio " << last.getNombre() << " desde el territorio ";
+                it = q.second.begin();
+                cout << it->getNombre() << ". Para conquistar el territorio " << last.getNombre() << ", debe atacar desde " << it->getNombre() << ", pasando por los territorios ";
+                for (auto terr: q.second) {
+                    cout << terr.getNombre() << ", ";
+                }
+                cout << ".Debe conquistar " << q.first << " unidades de ejercito.\n";
+            }
+
+            case costo_conquista: {
+                string code = "o";
+                set<string> validCodes;
+
+                for (auto terr: juego.getGame().getGrafo().getvertices()) {
+                    validCodes.insert(terr.getIdTerritorio());
+                }
+
+                while (!validCodes.count(code)) {
+                    cout << "Ingrese el codigo del territorio el cual quiere atacar: ";
+                    cin >> code;
+                }
+
+                pair<int, list<Territorio> > conquista = juego.getGame().costoConquista(code);
+
+                if (conquista.first == -1) {
+                    cout << "Ups, algo pasó en la conquista, debe ser que no es alcanzable o sucedio algo en el sistema\n";
+                } else {
+
+                    cout << "Para conquistar el territorio con el codigo: " << code << ", debe atacar desde ";
+                    for (auto terr: conquista.second) {
+                        cout << terr.getNombre() << ", ";
+                    }
+
+                    cout << ".Debe conquistar " << conquista.first << " unidades de ejercito.\n";
+                };
             }
 
             default:

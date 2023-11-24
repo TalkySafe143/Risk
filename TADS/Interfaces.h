@@ -8,6 +8,7 @@
 #include<iostream>
 #include "Risk.h"
 
+
 /**
  * El proposito general de esta clase es poder desarrollar las interfaces
  * O los pasos en los que hay que imprimir o interactuar con el usuario

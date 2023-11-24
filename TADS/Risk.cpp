@@ -542,3 +542,136 @@ list<int> Risk::tirarDados(int numDados) {
 
     return resultados;
 }
+
+void Risk::actualizarAristasGrafo(Jugador jug) {
+    list<Territorio> territorios = jug.getTerritorios();
+    list<Territorio> GrafoLista = Risk::grafo.getvertices();
+    for(Territorio terrJug : territorios){//los del jugador
+        for(int i=0; i< GrafoLista.size(); i++){//los del grafo
+            if(terrJug != Risk::grafo.InfoVertice(i)){
+                //Si es otro territorio, el costo de la arista debe ser el número de tropas en el territorio
+                for(auto sus : Risk::grafo.sucesores(i)){
+                    int noTropas = Risk::grafo.InfoVertice(i).getTropas();
+                    Risk::grafo.InsArco(i, sus, noTropas);
+                }
+            }
+            //Si es un territorio del jugador, el costo de la arista es 0
+            for(auto sus : Risk::grafo.sucesores(i)){
+                Risk::grafo.InsArco(i, sus, 0);
+            }
+        }
+    }
+}
+
+
+pair<int, list<Territorio>> Risk::conquistaMasBarata() {
+    this->actualizarAristasGrafo(*(this->turno));
+    int n = this->grafo.getvertices().size();
+    vector<  pair<  int, pair< int, vector< int > > > > parentDistTerr;
+    for (Territorio terr: this->turno->getTerritorios()) {
+        int vertex;
+        int i = 0;
+        for (auto terrGraph: this->grafo.getvertices()) {
+            if (terrGraph == terr) {
+                vertex = i;
+                break;
+            }
+            i++;
+        }
+
+        vector<int> dist(n, 1e7);
+        vector<int> parent(n, -1);
+        this->grafo.Dijkstra(vertex, dist, parent);
+
+        vector<int> distCopy(dist.begin(), dist.end());
+        sort(dist.begin(), dist.end());
+
+        for (int distances: dist) {
+            if (distances != 0) {
+                int par;
+                for (int k = 0; k < distCopy.size(); k++) {
+                    if (distCopy[k] == distances) {
+                        par = k;
+                        break;
+                    }
+                }
+
+                parentDistTerr.push_back(make_pair(distances, make_pair(par, parent)));
+                break;
+            }
+        }
+    }
+
+    sort(parentDistTerr.begin(), parentDistTerr.end());
+
+    pair<int, list<Territorio>> ans;
+    ans.first = parentDistTerr[0].first;
+
+    for (int p = parentDistTerr[0].second.first; p != -1; p = parentDistTerr[0].second.second[p]) {
+        auto it = this->grafo.getvertices().begin();
+        advance(it, p);
+        ans.second.push_front(*it);
+    }
+
+    return ans;
+}
+
+pair<int, list<Territorio>> Risk::costoConquista(string codeTerr) {
+    this->actualizarAristasGrafo(*(this->turno));
+    Territorio found;
+    list<Territorio> litGraph = this->grafo.getvertices();
+    int vertexTo, i = 0;
+    for (auto terrGr: litGraph) {
+        if (terrGr.getIdTerritorio() == codeTerr) {
+            found = terrGr;
+            vertexTo = i;
+            break;
+        }
+        i++;
+    }
+
+    vector<int> distanceFromRequest(litGraph.size(), 1e7);
+    vector<int> parent(litGraph.size(), -1);
+
+    this->grafo.BFSStandard(vertexTo, distanceFromRequest, parent);
+
+    vector< pair<int, int> > distanceFromRequestCopy;
+    i = 0;
+    for (auto d: distanceFromRequest) {
+        distanceFromRequestCopy.push_back({d, i});
+        i++;
+    }
+
+    sort(distanceFromRequestCopy.begin(), distanceFromRequestCopy.end());
+    int vertexFrom;
+    bool foundFrom = false;
+    for (auto [dist, node]: distanceFromRequestCopy) {
+        auto it = litGraph.begin();
+        advance(it, node);
+        for (Territorio terrJug: this->turno->getTerritorios()) {
+            if (*it == terrJug) {
+                vertexFrom = node;
+                foundFrom = true;
+                break;
+            }
+        }
+
+        if (foundFrom) break;
+    }
+
+    vector<int>dist(litGraph.size());
+    this->grafo.BFSCost(vertexFrom, dist, parent);
+
+    if (dist[vertexTo] == 1e6) return {-1, {}};
+
+    pair<int, list<Territorio>> ans;
+    ans.first = dist[vertexTo];
+
+    for (int p = vertexTo; p != -1; p = parent[p]) {
+        auto it = litGraph.begin();
+        advance(it, p);
+        ans.second.push_front(*it);
+    }
+
+    return ans;
+}

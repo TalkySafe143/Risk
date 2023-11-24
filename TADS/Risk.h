@@ -103,6 +103,12 @@ public:
      */
     Jugador avanzarTurno(int move);
 
+    /**
+     * El proposito de esta función es actualizar el peso de las aristas con respecto a los territorios adyacentes
+     * en ese momento.
+     */
+    void actualizarAristasGrafo(Jugador jug);
+
     bool esCombinacionValida(std::list<Carta>& cartas);
 
     void retirarCartasUtilizadas(std::list<Carta>& cartas, const std::list<Territorio>& territorios);
@@ -128,6 +134,10 @@ public:
     Grafo<Territorio> &getGrafo();
 
     int intercambiarCartas(list<Carta> &cartas, const list<Territorio> &territorios, int &gruposIntercambiados);
+
+    pair<int, list<Territorio>> conquistaMasBarata();
+
+    pair<int, list<Territorio>> costoConquista(string codeTerr);
 };
 
 
